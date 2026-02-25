@@ -33,8 +33,10 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-color); overflow-x: hidden; transition: background 0.3s, color 0.3s; }
 
+        /* 3D Canvas Background */
         #canvas-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
 
+        /* Overlays & Modals */
         .overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 2000; }
         .glass-box { background: var(--glass-bg); color: var(--text-color); padding: 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); width: 90%; max-width: 450px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
         .glass-box input, .glass-box select, .search-box input, .glass-box textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid var(--border); border-radius: 10px; outline: none; background: var(--bg-color); color: var(--text-color); }
@@ -45,29 +47,30 @@
         .close-icon:hover { color: #cc0000; transform: scale(1.1); }
         .admin-link { margin-top: 15px; font-size: 13px; cursor: pointer; color: var(--primary); font-weight: 600; text-decoration: underline; }
 
+        /* Header & Footer */
         header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: var(--glass-bg); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .logo { font-size: 24px; font-weight: 700; color: var(--primary); display: flex; align-items: center; }
         nav a { margin-left: 20px; text-decoration: none; color: var(--text-color); font-weight: 600; transition: 0.3s; }
         nav a:hover { color: var(--primary); }
         .cart-btn { background: var(--primary); color: white; padding: 8px 15px; border-radius: 20px; }
-        
         #mainFooter { background: #081c15; color: #b7e4c7; padding: 40px 50px; margin-top: 50px; }
         .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
         .footer-content p { font-size: 14px; margin-top: 10px; cursor: pointer; }
         .footer-bottom { text-align: center; margin-top: 30px; border-top: 1px solid #1b4332; padding-top: 20px; font-size: 14px; }
 
+        /* Main Pages */
         .page-section { min-height: 80vh; display: flex; align-items: center; padding: 40px 50px; }
         .hero-content { max-width: 500px; }
         .badge { background: var(--primary); color: white; padding: 5px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; }
         .hero-content h1 { font-size: 4rem; margin: 20px 0; line-height: 1.1; color: var(--text-color); }
         .highlight { color: var(--primary); }
 
+        /* Shop Grid & Filters */
         .shop-container { width: 100%; background: var(--glass-bg); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px); }
         .search-box { display: flex; align-items: center; gap: 10px; background: var(--bg-color); padding: 5px 15px; border-radius: 20px; border: 1px solid var(--border); }
         .search-box input { border: none; margin: 0; padding: 5px; }
         .filter-btn { padding: 8px 20px; border: none; border-radius: 20px; background: var(--bg-color); color: var(--text-color); cursor: pointer; font-weight: 600; border: 1px solid var(--border); transition: 0.3s;}
         .filter-btn.active, .filter-btn:hover { background: var(--primary); color: white; }
-        
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; margin-top: 25px; }
         .product-card { background: var(--card-bg); padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; transition: 0.3s; cursor: pointer; position: relative; border: 1px solid var(--border);}
         .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
@@ -76,6 +79,7 @@
         .wish-icon:hover { transform: scale(1.1); }
         .wish-icon.active { color: #ff4d4d; }
 
+        /* Admin Panel */
         .admin-sidebar { width: 250px; background: #081c15; color: white; padding: 30px; display: flex; flex-direction: column; gap: 15px; }
         .admin-sidebar a { color: #b7e4c7; text-decoration: none; font-size: 16px; transition: 0.3s; padding: 12px; border-radius: 8px; display: flex; align-items: center; gap: 10px;}
         .admin-sidebar a:hover, .admin-sidebar a.active { background: #1b4332; color: white; font-weight: bold; }
@@ -180,14 +184,14 @@
                 <div><h4>Quick Links</h4><p>About Us</p><p>Contact Us</p></div>
                 <div><h4>Policies</h4><p>Return & Refund</p><p>Privacy Policy</p></div>
             </div>
-            <div class="footer-bottom">&copy; 2026 Greenish Plant. Created by <strong>Vivek Shukla</strong>. All rights reserved.</div>
+            <div class="footer-bottom">&copy; 2026 Greenish Plant. Created by <strong>Vivek Sharma</strong>. All rights reserved.</div>
         </footer>
     </div>
 
     <div id="productOverlay" class="overlay" style="display: none; opacity: 0;">
         <div class="glass-box" style="text-align: left; position: relative;">
             <i class="fa-solid fa-xmark close-icon" style="position: absolute; top: 15px; right: 20px;" onclick="closeProductModal()"></i>
-            <img id="detailImg" src="" onerror="this.src='https://placehold.co/500x500/2d6a4f/ffffff?text=Plant+Image'" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 15px;">
+            <img id="detailImg" src="" referrerpolicy="no-referrer" onerror="imgError(this)" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 15px;">
             <h2 id="detailTitle">Plant Name</h2>
             <p id="detailPrice" style="font-size: 22px; font-weight: bold; color: var(--primary); margin-bottom: 5px;">₹0</p>
             <p id="detailStock" style="font-size: 12px; color: #d90429; font-weight: bold; margin-bottom: 15px;"></p>
@@ -225,20 +229,39 @@
     </div>
 
     <div id="paymentOverlay" class="overlay" style="display: none; opacity: 0;">
-        <div class="glass-box" style="text-align: left;">
+        <div class="glass-box" style="text-align: left; max-width: 450px;">
             <h2 id="payTitle">Secure Checkout 💳</h2>
             <div id="paymentForm">
-                <label style="font-size: 14px; font-weight: bold;">Delivery Address</label>
-                <textarea id="deliveryAddress" placeholder="Full address with pin code" rows="2" required></textarea>
+                <label style="font-size: 13px; font-weight: bold;">Delivery Address</label>
+                <textarea id="deliveryAddress" placeholder="Full address with pin code" rows="2" style="margin-bottom: 10px;" required></textarea>
                 
-                <label style="font-size: 14px; font-weight: bold;">Expected Delivery Date</label>
-                <input type="date" id="deliveryDate" required>
+                <label style="font-size: 13px; font-weight: bold;">Expected Delivery Date</label>
+                <input type="date" id="deliveryDate" style="margin-bottom: 15px;" required>
                 
-                <label style="font-size: 14px; font-weight: bold;">Payment Method</label>
-                <div style="margin-bottom: 15px; font-size: 14px;">
-                    <label><input type="radio" name="pay" checked> UPI</label>
-                    <label style="margin-left: 15px;"><input type="radio" name="pay"> Card</label>
-                    <label style="margin-left: 15px;"><input type="radio" name="pay"> COD</label>
+                <label style="font-size: 13px; font-weight: bold;">Select Payment Method</label>
+                <div style="display: flex; gap: 15px; margin-bottom: 15px; font-size: 14px;">
+                    <label><input type="radio" name="payMethod" value="upi" checked onchange="togglePaymentUI()"> UPI / QR</label>
+                    <label><input type="radio" name="payMethod" value="card" onchange="togglePaymentUI()"> Card</label>
+                    <label><input type="radio" name="payMethod" value="cod" onchange="togglePaymentUI()"> COD</label>
+                </div>
+                
+                <div id="upiSection" style="background: var(--bg-color); padding: 15px; border-radius: 10px; border: 1px solid var(--border); text-align: center; margin-bottom: 15px;">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=vivek@okicici&pn=GreenishPlant" alt="QR Code" style="width: 120px; border-radius: 8px; margin-bottom: 10px;">
+                    <p style="font-size: 12px; margin-bottom: 10px; color: var(--text-color);">Scan QR via GPay/PhonePe or Enter ID</p>
+                    <input type="text" placeholder="e.g., vivek02@okhdfc" style="margin: 0; text-align: center;">
+                </div>
+
+                <div id="cardSection" style="display: none; background: var(--bg-color); padding: 15px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 15px;">
+                    <input type="number" placeholder="Card Number (XXXX XXXX XXXX XXXX)" style="margin-top: 0;">
+                    <div style="display: flex; gap: 10px; margin-top: 5px;">
+                        <input type="text" placeholder="MM/YY" maxlength="5" style="margin: 0;">
+                        <input type="password" placeholder="CVV" maxlength="3" style="margin: 0;">
+                    </div>
+                </div>
+
+                <div id="codSection" style="display: none; background: var(--bg-color); padding: 15px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 15px; text-align: center;">
+                    <i class="fa-solid fa-truck" style="font-size: 30px; color: var(--primary); margin-bottom: 10px;"></i>
+                    <p style="font-size: 13px; color: var(--text-color);">Pay via Cash or UPI when your plant arrives.</p>
                 </div>
                 
                 <button class="btn-primary" style="width: 100%;" onclick="processAutoPayment()">Pay & Place Order</button>
@@ -247,12 +270,12 @@
 
             <div id="payLoader" style="display: none; text-align: center; padding: 20px;">
                 <div class="spinner" style="border: 5px solid var(--border); border-top: 5px solid var(--primary); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
-                <p style="margin-top: 15px; font-weight: bold;">Processing Payment...</p>
+                <p style="margin-top: 15px; font-weight: bold;">Processing Secure Payment...</p>
             </div>
             
             <div id="paySuccess" style="display: none; color: var(--primary); text-align: center;">
                 <i class="fa-solid fa-circle-check" style="font-size: 60px; margin-bottom: 10px;"></i>
-                <h2>Payment Successful!</h2>
+                <h2>Order Confirmed!</h2>
                 <button class="btn-primary" style="margin-top:20px; width: 100%;" onclick="closePaymentSuccess()">View Orders</button>
             </div>
         </div>
@@ -306,55 +329,62 @@
     </section>
 
     <script>
-        // --- Database: Premium A to Z Catalog (Fixed Last 3 Missing Images) ---
+        // --- 🌟 Offline Base64 Image Fallback ---
+        window.imgError = function(img) {
+            img.onerror = null; 
+            img.src = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Crect width='100%25' height='100%25' fill='%232d6a4f'/%3E%3Ctext x='50%25' y='50%25' font-size='24' font-weight='bold' font-family='sans-serif' fill='white' text-anchor='middle' dominant-baseline='middle'%3E%F0%9F%8C%BF Greenish Plant%3C/text%3E%3C/svg%3E";
+        };
+
+        // --- Database: Updated with custom local PNGs ---
         let products = [
             { id: 1, name: "Monstera Deliciosa", category: "Indoor", price: 499, stock: 10,
-              img: "https://images.pexels.com/photos/3125195/pexels-photo-3125195.jpeg?auto=compress&cs=tinysrgb&w=500",
+              img: "https://wsrv.nl/?url=images.pexels.com/photos/3125195/pexels-photo-3125195.jpeg&w=500&output=webp",
               tags: ["Air Purifying"], sun: "☀️ Medium", water: "💧 Weekly" },
 
             { id: 2, name: "Snake Plant", category: "Indoor", price: 299, stock: 5,
-              img: "https://images.pexels.com/photos/2123482/pexels-photo-2123482.jpeg?auto=compress&cs=tinysrgb&w=500",
+              img: "https://wsrv.nl/?url=images.pexels.com/photos/2123482/pexels-photo-2123482.jpeg&w=500&output=webp",
               tags: ["Low Maintenance"], sun: "☀️ Low", water: "💧 Bi-Weekly" },
 
             { id: 3, name: "Ficus Bonsai", category: "Indoor", price: 899, stock: 2,
-              img: "https://images.pexels.com/photos/3273934/pexels-photo-3273934.jpeg?auto=compress&cs=tinysrgb&w=500",
+              img: "https://wsrv.nl/?url=images.pexels.com/photos/3273934/pexels-photo-3273934.jpeg&w=500&output=webp",
               tags: ["Bonsai"], sun: "☀️ Bright", water: "💧 Frequent" },
 
             { id: 4, name: "Aloe Vera", category: "Outdoor", price: 199, stock: 20,
-              img: "https://images.pexels.com/photos/1334605/pexels-photo-1334605.jpeg?auto=compress&cs=tinysrgb&w=500",
+              img: "https://wsrv.nl/?url=images.pexels.com/photos/1334605/pexels-photo-1334605.jpeg&w=500&output=webp",
               tags: ["Medicinal"], sun: "☀️ Direct", water: "💧 Bi-Weekly" },
 
             { id: 5, name: "Areca Palm", category: "Outdoor", price: 699, stock: 0,
-              img: "https://images.pexels.com/photos/1084199/pexels-photo-1084199.jpeg?auto=compress&cs=tinysrgb&w=500",
+              img: "https://wsrv.nl/?url=images.pexels.com/photos/1084199/pexels-photo-1084199.jpeg&w=500&output=webp",
               tags: ["Big Size"], sun: "☀️ Indirect", water: "💧 Weekly" },
 
-            // 🌟 FIXED IMAGE 1: Red Rose
-          // 🌟 100% UNBLOCKABLE WIKIPEDIA IMAGES 🌟
-
+            // 🌟 LOCAL IMAGE SET FOR RED ROSE 🌟
             { id: 6, name: "Red Rose Plant", category: "Flowers", price: 349, stock: 15,
-              img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Red_Rose.jpg/500px-Red_Rose.jpg",
+              img: "redroseplant.png",
               tags: ["Romantic"], sun: "☀️ Full Sun", water: "💧 Daily" },
 
+            { id: 7, name: "Sunflower Pot", category: "Flowers", price: 250, stock: 8,
+              img: "https://wsrv.nl/?url=images.unsplash.com/photo-1470509037663-253afd7f0f51&w=500&output=webp",
+              tags: ["Bright"], sun: "☀️ Full Sun", water: "💧 Daily" },
 
-            
+            // 🌟 LOCAL IMAGE SET FOR MIXED SEEDS 🌟
             { id: 8, name: "Mixed Flower Seeds", category: "Seeds", price: 150, stock: 50,
-              img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Seed_mix.jpg/500px-Seed_mix.jpg",
+              img: "mixedflowerseeds.png",
               tags: ["Pack of 5"], sun: "☀️ Medium", water: "💧 Keep moist" },
 
             { id: 9, name: "Organic Basil Seeds", category: "Seeds", price: 99, stock: 30,
-              img: "https://images.pexels.com/photos/1080400/pexels-photo-1080400.jpeg?auto=compress&cs=tinysrgb&w=500",
+              img: "https://wsrv.nl/?url=images.pexels.com/photos/1080400/pexels-photo-1080400.jpeg&w=500&output=webp",
               tags: ["Herbs"], sun: "☀️ Full Sun", water: "💧 Daily" },
 
             { id: 10, name: "Premium Ceramic Pot", category: "Accessories", price: 399, stock: 12,
-              img: "https://images.pexels.com/photos/6601444/pexels-photo-6601444.jpeg?auto=compress&cs=tinysrgb&w=500",
+              img: "https://wsrv.nl/?url=images.pexels.com/photos/6601444/pexels-photo-6601444.jpeg&w=500&output=webp",
               tags: ["Decor"], sun: "N/A", water: "N/A" },
 
             { id: 11, name: "Terracotta Pots (Set)", category: "Accessories", price: 299, stock: 25,
-              img: "https://images.pexels.com/photos/4505166/pexels-photo-4505166.jpeg?auto=compress&cs=tinysrgb&w=500",
+              img: "https://wsrv.nl/?url=images.pexels.com/photos/4505166/pexels-photo-4505166.jpeg&w=500&output=webp",
               tags: ["Classic"], sun: "N/A", water: "N/A" },
 
             { id: 12, name: "Gardening Tool Kit", category: "Accessories", price: 549, stock: 5,
-              img: "https://images.pexels.com/photos/4202924/pexels-photo-4202924.jpeg?auto=compress&cs=tinysrgb&w=500",
+              img: "https://wsrv.nl/?url=images.pexels.com/photos/4202924/pexels-photo-4202924.jpeg&w=500&output=webp",
               tags: ["Steel"], sun: "N/A", water: "N/A" }
         ];
 
@@ -389,15 +419,14 @@
                 document.getElementById("loginOverlay").style.display = "none";
                 document.getElementById("mainHeader").style.display = "flex";
                 document.getElementById("mainContentWrapper").style.display = "block";
-                
-                // FORCE LOAD SHOP TO FIX BLANK SCREEN BUG
                 showSection('shopSection');
             }});
         }
 
+        // 🌟 CHANGED ADMIN ID TO Vivek02 🌟
         function adminLogin() {
             const id = prompt("Admin ID:"); const pass = prompt("Admin Password:");
-            if(id === "Vivekshukla" && pass === "Vivek1234@") {
+            if(id === "Vivek02" && pass === "Vivek1234@") {
                 document.getElementById("loginOverlay").style.display = "none";
                 document.getElementById("mainHeader").style.display = "none";
                 document.getElementById("mainContentWrapper").style.display = "none";
@@ -409,7 +438,6 @@
         function logout() { location.reload(); }
         function logoutAdmin() { location.reload(); }
 
-        // BUG FIX: Removed GSAP from here to ensure text is never invisible!
         function showSection(sectionId) {
             document.querySelectorAll('.page-section').forEach(sec => sec.style.display = 'none');
             const target = document.getElementById(sectionId);
@@ -436,7 +464,7 @@
                     grid.innerHTML += `
                         <div class="product-card" onclick="openProductModal(${p.id})">
                             <i class="fa-solid fa-heart wish-icon ${wishClass}" onclick="event.stopPropagation(); toggleWishlist(${p.id})"></i>
-                            <img src="${p.img}" alt="${p.name}" onerror="this.src='https://placehold.co/500x500/2d6a4f/ffffff?text=Plant+Image'">
+                            <img src="${p.img}" alt="${p.name}" referrerpolicy="no-referrer" onerror="imgError(this)">
                             <h3>${p.name}</h3>
                             <p style="font-weight: bold; color: var(--primary); margin: 10px 0; font-size: 18px;">₹${p.price}</p>
                             ${stockStatus}
@@ -478,7 +506,7 @@
                     grid.innerHTML += `
                         <div class="product-card">
                             <i class="fa-solid fa-heart wish-icon active" onclick="toggleWishlist(${p.id})"></i>
-                            <img src="${p.img}" onerror="this.src='https://placehold.co/500x500/2d6a4f/ffffff?text=Plant+Image'">
+                            <img src="${p.img}" referrerpolicy="no-referrer" onerror="imgError(this)">
                             <h3>${p.name}</h3>
                             <p style="font-weight: bold; color: var(--primary); margin: 10px 0;">₹${p.price}</p>
                             <button class="btn-primary" onclick="addToCart(${p.id}); toggleWishlist(${p.id})">Move to Cart</button>
@@ -573,12 +601,20 @@
             }
         }
 
-        // --- Checkout & Payment Simulation ---
+        // --- 🌟 Checkout & REAL Payment Gateway UI Logic 🌟 ---
         function startCheckout() {
             if(cart.length === 0) return alert("Add items to cart first!");
             closeCart();
             document.getElementById("paymentOverlay").style.display = "flex";
             gsap.to("#paymentOverlay", { opacity: 1, duration: 0.3 });
+            togglePaymentUI(); 
+        }
+
+        function togglePaymentUI() {
+            const method = document.querySelector('input[name="payMethod"]:checked').value;
+            document.getElementById("upiSection").style.display = method === "upi" ? "block" : "none";
+            document.getElementById("cardSection").style.display = method === "card" ? "block" : "none";
+            document.getElementById("codSection").style.display = method === "cod" ? "block" : "none";
         }
 
         function processAutoPayment() {
@@ -598,14 +634,16 @@
                 let cartTotalValue = parseInt(document.getElementById("cartTotal").innerText);
                 let randomOrderId = Math.floor(Math.random() * 90000) + 10000;
                 
+                // 1. Add to Customer Orders History
                 myOrders.push({ id: randomOrderId, items: cart.length, total: cartTotalValue, status: 'Processing', date: date });
                 totalRevenue += cartTotalValue;
                 
+                // 2. Add to Admin Orders Live 
                 let adminTable = document.getElementById("adminOrderTable");
                 let newAdminOrder = `
                     <tr id="row-${randomOrderId}">
                         <td style="font-weight: bold;">#ORD-${randomOrderId}</td>
-                        <td>Live Demo User</td>
+                        <td>Live Customer</td>
                         <td style="color: var(--primary); font-weight: bold;">₹${cartTotalValue}</td>
                         <td>
                             <select onchange="changeOrderStatus(${randomOrderId}, this.value)" style="padding:5px; border-radius:5px; border:1px solid #ccc; background:white; color:black;">
@@ -683,7 +721,7 @@
             products.forEach((p, index) => {
                 table.innerHTML += `
                     <tr>
-                        <td><img src="${p.img}" onerror="this.src='https://placehold.co/500x500/2d6a4f/ffffff?text=Plant'" style="width:50px; height:50px; border-radius:5px; object-fit:cover;"></td>
+                        <td><img src="${p.img}" referrerpolicy="no-referrer" onerror="imgError(this)" style="width:50px; height:50px; border-radius:5px; object-fit:cover;"></td>
                         <td>${p.name}</td>
                         <td>₹${p.price}</td>
                         <td><input type="number" value="${p.stock}" onchange="updateStock(${p.id}, this.value)" style="width:60px; padding:5px; border-radius:5px; border:1px solid var(--border); background:var(--bg-color); color:var(--text-color);"></td>
@@ -700,7 +738,7 @@
             if(name && price && stock) {
                 products.push({
                     id: Date.now(), name: name, category: "Indoor", price: parseInt(price), stock: parseInt(stock),
-                    img: "https://placehold.co/500x500/2d6a4f/ffffff?text=New+Plant", tags: ["New Arrival"], sun:"☀️ Medium", water:"💧 Weekly"
+                    img: "https://wsrv.nl/?url=images.pexels.com/photos/14666924/pexels-photo-14666924.jpeg&w=500&output=webp", tags: ["New Arrival"], sun:"☀️ Medium", water:"💧 Weekly"
                 });
                 renderAdminProducts(); renderProducts('All'); alert("Product Added Successfully!");
             } else alert("Please fill all fields to add a new product.");
