@@ -9,14 +9,13 @@ import java.util.concurrent.ConcurrentHashMap;
 @SpringBootApplication
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*")
+@CrossOrigin
 public class Application {
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
-    private static Map<String, Map<String, Object>> users = new ConcurrentHashMap<>();
     private static Map<String, Map<String, Object>> orders = new ConcurrentHashMap<>();
     private static List<Map<String, Object>> products = new ArrayList<>();
 
@@ -33,23 +32,15 @@ public class Application {
         p.put("id", UUID.randomUUID().toString());
         p.put("name", name);
         p.put("price", price);
-        p.put("stock", 50);
         products.add(p);
     }
 
-    // OTP Login
     @PostMapping("/login")
     public Map<String, Object> login(@RequestBody Map<String, String> body) {
-        String phone = body.get("phone");
-        String name = body.get("name");
-
         Map<String, Object> user = new HashMap<>();
-        user.put("phone", phone);
-        user.put("name", name);
-        user.put("role", phone.equals("9999999999") ? "ADMIN" : "USER");
-
-        users.put(phone, user);
-
+        user.put("name", body.get("name"));
+        user.put("phone", body.get("phone"));
+        user.put("role", body.get("phone").equals("9999999999") ? "ADMIN" : "USER");
         return user;
     }
 
@@ -59,37 +50,31 @@ public class Application {
     }
 
     @PostMapping("/order")
-    public Map<String, Object> placeOrder(@RequestBody Map<String, Object> payload) {
+    public Map<String, Object> order(@RequestBody Map<String, Object> payload) {
         String id = "GREENISH-" + System.currentTimeMillis();
         payload.put("orderId", id);
         payload.put("status", "PLACED");
         orders.put(id, payload);
 
-        Map<String, Object> res = new HashMap<>();
-        res.put("message", "Order Successful");
-        res.put("orderId", id);
-        return res;
+        return Map.of("orderId", id, "message", "Order Successful");
     }
 
     @GetMapping("/orders")
-    public Collection<Map<String, Object>> getAllOrders() {
+    public Collection<Map<String, Object>> getOrders() {
         return orders.values();
+    }
+
+    @PostMapping("/update")
+    public Map<String, String> update(@RequestBody Map<String, String> body) {
+        if (orders.containsKey(body.get("orderId"))) {
+            orders.get(body.get("orderId")).put("status", body.get("status"));
+            return Map.of("message", "Updated");
+        }
+        return Map.of("message", "Not Found");
     }
 
     @GetMapping("/track/{id}")
     public Map<String, Object> track(@PathVariable String id) {
-        return orders.getOrDefault(id, Map.of("error", "Order Not Found"));
-    }
-
-    @PostMapping("/admin/update-status")
-    public Map<String, String> updateStatus(@RequestBody Map<String, String> body) {
-        String id = body.get("orderId");
-        String status = body.get("status");
-
-        if (orders.containsKey(id)) {
-            orders.get(id).put("status", status);
-            return Map.of("message", "Updated");
-        }
-        return Map.of("message", "Order Not Found");
+        return orders.getOrDefault(id, Map.of("error", "Not Found"));
     }
 }
