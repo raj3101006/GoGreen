@@ -1,446 +1,124 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Greenish Plant - Premium 3D Enterprise</title>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        /* 🎨 ADVANCED SYSTEM CSS - 300+ Lines */
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
-
-        :root {
-            --primary: #2d6a4f;
-            --primary-light: #40916c;
-            --accent: #95d5b2;
-            --bg: #eaf4f0;
-            --text: #1b4332;
-            --white: #ffffff;
-            --glass: rgba(255, 255, 255, 0.92);
-            --shadow: 0 10px 30px rgba(0,0,0,0.08);
-            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-        }
-
-        /* Scrollbar Fix */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg); color: var(--text); overflow-x: hidden; scroll-behavior: smooth; }
-
-        /* 3D Background Container */
-        #canvas-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
-
-        /* Navigation - Glassmorphism */
-        header { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 15px 8%; background: var(--glass); backdrop-filter: blur(15px); 
-            position: sticky; top: 0; z-index: 1000; box-shadow: var(--shadow);
-            border-bottom: 1px solid rgba(255,255,255,0.3);
-        }
-        .logo { font-size: 26px; font-weight: 800; color: var(--primary); letter-spacing: -1px; }
-        nav { display: flex; gap: 25px; align-items: center; }
-        nav a { 
-            text-decoration: none; color: var(--text); font-weight: 600; 
-            font-size: 14px; cursor: pointer; transition: var(--transition);
-            position: relative;
-        }
-        nav a::after {
-            content: ''; position: absolute; bottom: -5px; left: 0; 
-            width: 0; height: 2px; background: var(--primary); transition: 0.3s;
-        }
-        nav a:hover::after { width: 100%; }
-
-        /* Hero Section - Detailed */
-        .page-section { min-height: 90vh; padding: 60px 8%; display: none; }
-        #homeSection { display: flex; align-items: center; justify-content: space-between; gap: 40px; }
-        .hero-text { flex: 1; }
-        .hero-text h1 { font-size: 4.5rem; line-height: 1.1; margin-bottom: 25px; font-weight: 800; }
-        .hero-text span { color: var(--primary); text-shadow: 2px 2px 0px rgba(0,0,0,0.05); }
-        .hero-text p { font-size: 18px; margin-bottom: 30px; opacity: 0.8; line-height: 1.6; }
-
-        /* Button Styling */
-        .btn-main { 
-            padding: 15px 35px; background: var(--primary); color: white; 
-            border: none; border-radius: 50px; font-weight: 700; cursor: pointer; 
-            transition: var(--transition); box-shadow: 0 10px 20px rgba(45, 106, 79, 0.3);
-            text-transform: uppercase; letter-spacing: 1px;
-        }
-        .btn-main:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(45, 106, 79, 0.4); }
-
-        /* Shop Grid - Pro Layout */
-        .filter-container { display: flex; gap: 12px; margin-bottom: 40px; flex-wrap: wrap; justify-content: center; }
-        .filter-chip { 
-            padding: 10px 20px; border-radius: 30px; border: 1.5px solid var(--primary); 
-            background: white; color: var(--primary); cursor: pointer; font-weight: 600;
-            transition: 0.3s; font-size: 13px;
-        }
-        .filter-chip.active { background: var(--primary); color: white; }
-
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
-        .plant-card { 
-            background: white; border-radius: 25px; padding: 20px; border: 1px solid #eee; 
-            transition: var(--transition); position: relative; overflow: hidden;
-        }
-        .plant-card:hover { transform: translateY(-12px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        .plant-card img { width: 100%; height: 260px; object-fit: cover; border-radius: 20px; margin-bottom: 15px; }
-        .plant-card h3 { font-size: 20px; margin-bottom: 8px; font-weight: 700; }
-        .plant-card .price { font-size: 22px; font-weight: 800; color: var(--primary); }
-        .plant-card .tag-badge { 
-            position: absolute; top: 30px; left: 30px; background: var(--primary); 
-            color: white; padding: 4px 12px; border-radius: 10px; font-size: 11px; font-weight: 700;
-        }
-
-        /* FAQ Section Content */
-        .faq-item { background: white; padding: 20px; border-radius: 15px; margin-bottom: 15px; cursor: pointer; border: 1px solid #ddd; }
-        .faq-item h4 { margin-bottom: 10px; color: var(--primary); }
-
-        /* Overlay & Modals */
-        .overlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.75); backdrop-filter: blur(10px); 
-            display: none; justify-content: center; align-items: center; z-index: 5000;
-        }
-        .modal-box { 
-            background: var(--glass); padding: 40px; border-radius: 30px; 
-            width: 90%; max-width: 480px; text-align: center; position: relative;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-        }
-
-        /* Professional Payment UI */
-        .pay-interface { text-align: left; }
-        .pay-interface input, .pay-interface textarea { 
-            width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ddd; 
-            border-radius: 12px; outline: none; transition: 0.3s;
-        }
-        .pay-interface input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(45,106,79,0.1); }
-
-        .loading-container { display: none; margin: 30px 0; }
-        .spin { border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; width: 45px; height: 45px; animation: spin 1s linear infinite; margin: 0 auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            header { padding: 15px 20px; flex-direction: column; }
-            .hero-text h1 { font-size: 2.5rem; }
-            .product-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
-            .plant-card img { height: 160px; }
-            nav { margin-top: 15px; gap: 12px; flex-wrap: wrap; justify-content: center; }
-        }
-
-        footer { background: #081c15; color: white; padding: 60px 8%; text-align: center; }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: left; margin-bottom: 40px; }
-    </style>
+<title>Greenish Plant | E-Commerce</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{margin:0;font-family:Arial;background:#f2f8f2}
+header{background:#0f5132;color:white;padding:15px;text-align:center}
+button{padding:8px 15px;background:#198754;color:white;border:none;border-radius:5px;cursor:pointer}
+input{padding:8px;margin:5px}
+.card{background:white;padding:15px;margin:10px;border-radius:10px;box-shadow:0 3px 10px rgba(0,0,0,0.1);display:inline-block;width:200px}
+#popup{position:fixed;top:0;left:0;width:100%;height:100%;background:black;color:white;display:flex;align-items:center;justify-content:center;font-size:25px}
+footer{background:#0f5132;color:white;text-align:center;padding:10px;margin-top:40px}
+</style>
 </head>
+
 <body>
 
-    <div id="canvas-container"></div>
+<div id="popup">🌿 Welcome to Greenish Plant<br>Developed by Vivek Sharma</div>
 
-    <div id="loginOverlay" class="overlay" style="display: flex;">
-        <div class="modal-box">
-            <h2 style="font-size: 28px; margin-bottom: 10px;">Authorize Session</h2>
-            <p style="opacity: 0.7; margin-bottom: 25px;">Vivek Sharma Enterprise Java v2.0</p>
-            <input type="number" id="phoneInput" placeholder="Enter Mobile Number" style="width:100%; padding:15px; margin-bottom:15px; border-radius:15px; border:1px solid #ddd;">
-            <button class="btn-main" style="width:100%" onclick="Auth.init()">Login to Root</button>
-            <p onclick="adminLogin()" style="margin-top:20px; cursor:pointer; font-size:12px; color:var(--primary); font-weight:700;">ADMIN ROOT ACCESS</p>
-        </div>
-    </div>
+<header>
+Greenish Plant E-Commerce
+</header>
 
-    <header id="mainNav" style="display:none">
-        <div class="logo">🌿 GREENISH</div>
-        <nav>
-            <a onclick="UI.navigate('homeSection')">HOME</a>
-            <a onclick="UI.navigate('shopSection')">CATALOG</a>
-            <a onclick="UI.navigate('guideSection')">CARE GUIDE</a>
-            <a onclick="UI.navigate('aboutSection')">ABOUT</a>
-            <a onclick="Cart.open()" style="background:var(--primary); color:white; padding:8px 20px; border-radius:30px;">CART (<span id="count">0</span>)</a>
-        </nav>
-    </header>
+<div id="login">
+<h3>Login</h3>
+<input id="name" placeholder="Name">
+<input id="phone" placeholder="Phone">
+<button onclick="login()">Login</button>
+</div>
 
-    <div id="appBody" style="display:none">
-        <section id="homeSection" class="page-section" style="display:flex">
-            <div class="hero-text">
-                <span style="background:var(--primary); color:white; padding:5px 15px; border-radius:20px; font-size:12px; font-weight:700;">EST. 2026 IN VIRAR</span>
-                <h1>Fresh Plants <br> <span>Straight to Your Door</span></h1>
-                <p>We provide India's finest collection of indoor, outdoor, and medicinal plants with a persistent SQL transaction architecture.</p>
-                <div style="display:flex; gap:15px;">
-                    <button class="btn-main" onclick="UI.navigate('shopSection')">Start Shopping</button>
-                    <button class="btn-main" style="background:white; color:var(--primary);" onclick="UI.navigate('aboutSection')">Our Story</button>
-                </div>
-            </div>
-        </section>
+<div id="dashboard" style="display:none">
+<h3>Products</h3>
+<div id="products"></div>
 
-        <section id="shopSection" class="page-section">
-            <h2 style="text-align:center; font-size:40px; margin-bottom:30px;">Premium Inventory</h2>
-            <div class="filter-container">
-                <button class="filter-chip active" onclick="Shop.filter('All', this)">All Plants</button>
-                <button class="filter-chip" onclick="Shop.filter('Indoor', this)">Indoor 🪴</button>
-                <button class="filter-chip" onclick="Shop.filter('Outdoor', this)">Outdoor 🌳</button>
-                <button class="filter-chip" onclick="Shop.filter('Medicinal', this)">Medicinal 🌿</button>
-                <button class="filter-chip" onclick="Shop.filter('Seeds', this)">Seeds 🌱</button>
-            </div>
-            <div class="product-grid" id="plantGrid"></div>
-        </section>
+<h3>Track Order</h3>
+<input id="trackId" placeholder="Order ID">
+<button onclick="track()">Track</button>
+<div id="result"></div>
+</div>
 
-        <section id="guideSection" class="page-section">
-            <h2 style="margin-bottom:30px;">Expert Plant Care Guide</h2>
-            <div class="faq-item">
-                <h4>☀️ Sunlight Management</h4>
-                <p>Low-light plants (Monstera, Snake Plant) need indirect sun. Bright light plants (Roses) need 6 hours of direct sun.</p>
-            </div>
-            <div class="faq-item">
-                <h4>💧 Watering Frequency</h4>
-                <p>Always check the top 1 inch of soil. If it's dry, water it. Over-watering causes root rot.</p>
-            </div>
-            <div class="faq-item">
-                <h4>🐶 Pet Safety</h4>
-                <p>Many indoor plants are toxic to pets. Use our "Pet-Friendly" filter for safe options.</p>
-            </div>
-        </section>
+<div id="admin" style="display:none">
+<h3>Admin Panel</h3>
+<div id="orders"></div>
+</div>
 
-        <section id="aboutSection" class="page-section">
-            <h2>The Greenish Enterprise Story</h2>
-            <div style="background:white; padding:40px; border-radius:30px; margin-top:20px;">
-                <p>Based in **Virar, Maharashtra**, Greenish Plant was founded by **Vivek Sharma** to bridge the gap between technology and sustainable living.</p>
-                <br>
-                <p>This platform uses **Java Spring Boot** for the backend engine and **PostgreSQL** for secure transaction commits. Every order placed is recorded in our cloud-hosted SQL server.</p>
-            </div>
-        </section>
+<footer>
+© 2026 Greenish Plant | Developed by Vivek Sharma
+</footer>
 
-        <section id="adminSection" class="page-section">
-            <h2>Root SQL Transaction Logs</h2>
-            <div id="adminOrders" style="margin-top:20px;"></div>
-        </section>
-    </div>
+<script>
+setTimeout(()=>document.getElementById("popup").style.display="none",2000)
 
-    <div id="cartModal" class="overlay">
-        <div class="modal-box">
-            <h2 style="margin-bottom:20px;">Serialized Cart</h2>
-            <div id="cartBody" style="text-align:left; margin-bottom:20px; font-size:14px;"></div>
-            <h3 id="cartTotal">Total: ₹0</h3>
-            <button class="btn-main" style="width:100%; margin-top:20px;" onclick="Cart.proceed()">Commit Checkout</button>
-            <button class="btn-main" style="width:100%; margin-top:10px; background:#555;" onclick="Cart.close()">Close</button>
-        </div>
-    </div>
+let user=null
 
-    <div id="payModal" class="overlay">
-        <div class="modal-box pay-interface">
-            <div id="payForm">
-                <h2>Transaction Details</h2>
-                <label style="font-size:12px; font-weight:700;">Delivery Address:</label>
-                <textarea id="addr" placeholder="House no, Street, City, Pin"></textarea>
-                <div style="text-align:center; background:#f0f0f0; padding:20px; border-radius:20px; margin:15px 0;">
-                    <p style="font-size:10px; margin-bottom:10px;">Scan QR to Commit SQL Transaction</p>
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=upi://pay?pa=vivek@upi" style="border-radius:10px;">
-                </div>
-                <button class="btn-main" style="width:100%" onclick="SQL.execute()">Commit SQL INSERT</button>
-            </div>
-            
-            <div id="payLoad" class="loading-container">
-                <div class="spin"></div>
-                <p style="text-align:center; font-weight:700; margin-top:15px;">Serializing Data & Sending to Java Server...</p>
-            </div>
+function login(){
+fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},
+body:JSON.stringify({name:name.value,phone:phone.value})})
+.then(r=>r.json())
+.then(d=>{
+user=d
+login.style.display="none"
+if(d.role==="ADMIN"){admin.style.display="block";loadOrders()}
+else{dashboard.style.display="block";loadProducts()}
+})
+}
 
-            <div id="payDone" style="display:none; text-align:center;">
-                <h2 style="color:var(--primary)">SUCCESS! 🎉</h2>
-                <p>TXN_ID: <span id="txnId"></span></p>
-                <p style="font-size:12px; opacity:0.6; margin:15px 0;">Data has been successfully written to PostgreSQL instance.</p>
-                <button class="btn-main" onclick="location.reload()">Finish</button>
-            </div>
-        </div>
-    </div>
+function loadProducts(){
+fetch("/api/products")
+.then(r=>r.json())
+.then(data=>{
+products.innerHTML=""
+data.forEach(p=>{
+products.innerHTML+=`
+<div class="card">
+<h4>${p.name}</h4>
+<p>₹ ${p.price}</p>
+<button onclick="buy('${p.name}',${p.price})">Buy</button>
+</div>`
+})
+})
+}
 
-    <footer>
-        <div class="footer-grid">
-            <div><h3>GREENISH</h3><p>Sustainable Enterprise</p></div>
-            <div><h4>QUICK LINKS</h4><p onclick="UI.navigate('shopSection')">Catalog</p><p onclick="UI.navigate('aboutSection')">Story</p></div>
-            <div><h4>POLICIES</h4><p>Return (None for Plants)</p><p>Refund Policy</p></div>
-            <div><h4>DEVELOPER</h4><p>Vivek Sharma</p><p>Spring Boot v3.1</p></div>
-        </div>
-        <p>&copy; 2026 Greenish Plant Store. No Logout Bug Fixed.</p>
-    </footer>
+function buy(name,price){
+if(!confirm("Proceed to Payment Demo?")) return
+fetch("/api/order",{method:"POST",headers:{"Content-Type":"application/json"},
+body:JSON.stringify({user:user.name,product:name,price:price})})
+.then(r=>r.json())
+.then(d=>alert("Order ID: "+d.orderId))
+}
 
-    <script>
-        /* ☕ JAVA-SQL ENGINE - Modular JS */
-        const Auth = {
-            init() {
-                if(document.getElementById('phoneInput').value.length === 10) {
-                    gsap.to("#loginOverlay", { opacity: 0, duration: 0.6, onComplete: () => {
-                        document.getElementById('loginOverlay').style.display = 'none';
-                        document.getElementById('mainNav').style.display = 'flex';
-                        document.getElementById('appBody').style.display = 'block';
-                    }});
-                } else alert("NullPointerException: Phone length invalid!");
-            }
-        };
+function loadOrders(){
+fetch("/api/orders")
+.then(r=>r.json())
+.then(data=>{
+orders.innerHTML=""
+data.forEach(o=>{
+orders.innerHTML+=`
+<div class="card">
+<p>${o.product}</p>
+<p>${o.orderId}</p>
+<p>${o.status}</p>
+<button onclick="updateStatus('${o.orderId}','SHIPPED')">Ship</button>
+<button onclick="updateStatus('${o.orderId}','DELIVERED')">Deliver</button>
+</div>`
+})
+})
+}
 
-        const SQL = {
-            async execute() {
-                let addr = document.getElementById('addr').value;
-                if(!addr) return alert("SQLException: Address cannot be null!");
-                
-                document.getElementById('payForm').style.display = 'none';
-                document.getElementById('payLoad').style.display = 'block';
+function updateStatus(id,status){
+fetch("/api/update",{method:"POST",headers:{"Content-Type":"application/json"},
+body:JSON.stringify({orderId:id,status:status})})
+.then(()=>loadOrders())
+}
 
-                const orderObj = {
-                    id: "TXN" + Math.floor(Math.random()*99999),
-                    total: document.getElementById('cartTotal').innerText,
-                    address: addr,
-                    date: new Date().toLocaleString(),
-                    items: [...cartItems]
-                };
+function track(){
+fetch("/api/track/"+trackId.value)
+.then(r=>r.json())
+.then(d=>result.innerHTML=d.status? "Status: "+d.status : "Not Found")
+}
+</script>
 
-                try {
-                    // Actual Java REST API Call
-                    await fetch('/api/commitTransaction', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify(orderObj)
-                    });
-
-                    setTimeout(() => {
-                        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-                        document.getElementById('payLoad').style.display = 'none';
-                        document.getElementById('payDone').style.display = 'block';
-                        document.getElementById('txnId').innerText = orderObj.id;
-                        
-                        // Persistent Storage Backup
-                        let db = JSON.parse(localStorage.getItem('java_db')) || [];
-                        db.push(orderObj);
-                        localStorage.setItem('java_db', JSON.stringify(db));
-                    }, 2500);
-                } catch(e) { alert("Server Busy: Local Backup Triggered."); location.reload(); }
-            },
-            async fetchLogs() {
-                try {
-                    const res = await fetch('/api/fetchOrders');
-                    const data = await res.json();
-                    return data;
-                } catch(e) { return JSON.parse(localStorage.getItem('java_db')) || []; }
-            }
-        };
-
-        const UI = {
-            navigate(id) {
-                document.querySelectorAll('.page-section').forEach(s => s.style.display = 'none');
-                document.getElementById(id).style.display = (id === 'homeSection') ? 'flex' : 'block';
-                if(id === 'adminSection') this.renderAdmin();
-                window.scrollTo(0,0);
-            },
-            async renderAdmin() {
-                const logs = await SQL.fetchLogs();
-                let html = "<table width='100%' style='border-collapse:collapse; background:white; border-radius:20px; overflow:hidden;'>";
-                html += "<tr style='background:var(--primary); color:white;'><th>TXN_ID</th><th>TOTAL</th><th>DATE</th></tr>";
-                logs.reverse().forEach(o => {
-                    html += `<tr style='border-bottom:1px solid #eee; text-align:center;'><td>#${o.id}</td><td>${o.total}</td><td>${o.date}</td></tr>`;
-                });
-                document.getElementById('adminOrders').innerHTML = html + "</table>";
-            }
-        };
-
-        /* 🛒 SHOPPING CART SYSTEM */
-        let cartItems = [];
-        const products = [
-            { id: 1, name: "Monstera Deliciosa", cat: "Indoor", price: 499, tag: "Best Seller", sun: "Low", img: "https://images.pexels.com/photos/3125195/pexels-photo-3125195.jpeg?w=400" },
-            { id: 2, name: "Snake Plant", cat: "Indoor", price: 299, tag: "Air Purifier", sun: "Low", img: "https://images.pexels.com/photos/2123482/pexels-photo-2123482.jpeg?w=400" },
-            { id: 3, name: "Ficus Bonsai", cat: "Indoor", price: 899, tag: "Premium", sun: "Med", img: "https://images.pexels.com/photos/3273934/pexels-photo-3273934.jpeg?w=400" },
-            { id: 4, name: "Aloe Vera", cat: "Medicinal", price: 199, tag: "Skincare", sun: "High", img: "https://images.pexels.com/photos/1334605/pexels-photo-1334605.jpeg?w=400" },
-            { id: 5, name: "Areca Palm", cat: "Outdoor", price: 699, tag: "Low Oxygen", sun: "Med", img: "https://images.pexels.com/photos/1084199/pexels-photo-1084199.jpeg?w=400" },
-            { id: 6, name: "Red Rose", cat: "Outdoor", price: 349, tag: "Flowering", sun: "High", img: "https://images.pexels.com/photos/736230/pexels-photo-736230.jpeg?w=400" },
-            { id: 7, name: "Peace Lily", cat: "Indoor", price: 450, tag: "Indoor Air", sun: "Low", img: "https://images.pexels.com/photos/1105019/pexels-photo-1105019.jpeg?w=400" },
-            { id: 8, name: "Basil Pot", cat: "Medicinal", price: 150, tag: "Spiritual", sun: "High", img: "https://images.pexels.com/photos/1080400/pexels-photo-1080400.jpeg?w=400" },
-            { id: 9, name: "Sunflower Seeds", cat: "Seeds", price: 99, tag: "Garden Kit", sun: "High", img: "https://images.pexels.com/photos/1366630/pexels-photo-1366630.jpeg?w=400" },
-            { id: 10, name: "Cactus Trio", cat: "Indoor", price: 799, tag: "Miniature", sun: "Low", img: "https://images.pexels.com/photos/14666924/pexels-photo-14666924.jpeg?w=400" },
-            { id: 11, name: "Money Plant", cat: "Indoor", price: 299, tag: "Prosperity", sun: "Low", img: "https://images.pexels.com/photos/307008/pexels-photo-307008.jpeg?w=400" },
-            { id: 12, name: "Tulip Combo", cat: "Seeds", price: 549, tag: "Imported", sun: "Med", img: "https://images.pexels.com/photos/1003914/pexels-photo-1003914.jpeg?w=400" }
-        ];
-
-        const Shop = {
-            filter(cat, btn) {
-                document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
-                if(btn) btn.classList.add('active');
-                this.render(cat);
-            },
-            render(cat) {
-                const grid = document.getElementById('plantGrid'); grid.innerHTML = "";
-                let list = (cat === 'All') ? products : products.filter(p => p.cat === cat);
-                list.forEach(p => {
-                    grid.innerHTML += `
-                    <div class="plant-card">
-                        <span class="tag-badge">${p.tag}</span>
-                        <img src="${p.img}">
-                        <h3>${p.name}</h3>
-                        <p style="font-size:12px; opacity:0.6; margin-bottom:10px;">☀️ ${p.sun} | 💧 Weekly</p>
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span class="price">₹${p.price}</span>
-                            <button onclick="Cart.add(${p.id})" style="background:var(--primary); color:white; border:none; padding:8px 15px; border-radius:10px; cursor:pointer;">Add Object</button>
-                        </div>
-                    </div>`;
-                });
-            }
-        };
-
-        const Cart = {
-            add(id) { 
-                let p = products.find(x => x.id === id); 
-                cartItems.push(p); 
-                document.getElementById('count').innerText = cartItems.length;
-                alert(p.name + " Added to Object Stream.");
-            },
-            open() {
-                document.getElementById('cartModal').style.display = 'flex';
-                let h = ""; let t = 0;
-                cartItems.forEach(i => { h += `<p style='border-bottom:1px solid #eee; padding:5px 0;'>• ${i.name} (₹${i.price})</p>`; t += i.price; });
-                document.getElementById('cartBody').innerHTML = h || "No Items in Serialized Stream.";
-                document.getElementById('cartTotal').innerText = "₹" + t;
-            },
-            close() { document.getElementById('cartModal').style.display = 'none'; },
-            proceed() { if(cartItems.length === 0) return; this.close(); document.getElementById('payModal').style.display = 'flex'; }
-        };
-
-        function adminLogin() {
-            let id = prompt("Root User:"); let pass = prompt("Root Password:");
-            if(id === "Vivek02" && pass === "Vivek1234@") UI.navigate('adminSection');
-        }
-
-        window.onload = () => { Shop.render('All'); init3D(); };
-
-        /* 🎨 3D TorusKnot Engine */
-        function init3D() {
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            document.getElementById('canvas-container').appendChild(renderer.domElement);
-            
-            const shape = new THREE.Mesh(
-                new THREE.TorusKnotGeometry(1.5, 0.4, 100, 16), 
-                new THREE.MeshStandardMaterial({ color: 0x40916c, wireframe: true })
-            );
-            scene.add(shape);
-            
-            const light = new THREE.PointLight(0xffffff, 1); light.position.set(10,10,10); scene.add(light);
-            camera.position.z = 6;
-            
-            function animate() {
-                requestAnimationFrame(animate);
-                shape.rotation.x += 0.005; shape.rotation.y += 0.005;
-                renderer.render(scene, camera);
-            }
-            animate();
-            
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth/window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-        }
-    </script>
 </body>
 </html>
