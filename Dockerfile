@@ -5,6 +5,7 @@ RUN mvn clean package -DskipTests
 
 # Run stage
 FROM eclipse-temurin:17-jdk
-COPY --from=build /target/*.jar app.jar
+# Yahan 'plant-store' wahi naam hai jo pom.xml ke artifactId mein hai
+COPY --from=build /target/plant-store-1.0.0.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app.jar"]
