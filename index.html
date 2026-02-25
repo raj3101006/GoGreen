@@ -248,11 +248,11 @@
                 <div id="upiSection" style="background: var(--bg-color); padding: 15px; border-radius: 10px; border: 1px solid var(--border); text-align: center; margin-bottom: 15px;">
                     <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=vivek@okicici&pn=GreenishPlant" alt="QR Code" style="width: 120px; border-radius: 8px; margin-bottom: 10px;">
                     <p style="font-size: 12px; margin-bottom: 10px; color: var(--text-color);">Scan QR via GPay/PhonePe or Enter ID</p>
-                    <input type="text" placeholder="e.g., vivek02@okhdfc" style="margin: 0; text-align: center;">
+                    <input type="text" id="upiIdInput" placeholder="e.g., vivek02@okhdfc" style="margin: 0; text-align: center;">
                 </div>
 
                 <div id="cardSection" style="display: none; background: var(--bg-color); padding: 15px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 15px;">
-                    <input type="number" placeholder="Card Number (XXXX XXXX XXXX XXXX)" style="margin-top: 0;">
+                    <input type="number" id="cardNoInput" placeholder="Card Number (XXXX XXXX XXXX XXXX)" style="margin-top: 0;">
                     <div style="display: flex; gap: 10px; margin-top: 5px;">
                         <input type="text" placeholder="MM/YY" maxlength="5" style="margin: 0;">
                         <input type="password" placeholder="CVV" maxlength="3" style="margin: 0;">
@@ -423,7 +423,7 @@
             }});
         }
 
-        // 🌟 CHANGED ADMIN ID TO Vivek02 🌟
+        // 🌟 ADMIN ID: Vivek02 🌟
         function adminLogin() {
             const id = prompt("Admin ID:"); const pass = prompt("Admin Password:");
             if(id === "Vivek02" && pass === "Vivek1234@") {
@@ -431,12 +431,26 @@
                 document.getElementById("mainHeader").style.display = "none";
                 document.getElementById("mainContentWrapper").style.display = "none";
                 document.getElementById("adminSection").style.display = "flex";
+                
+                // FORCE RE-RENDER ORDERS IN ADMIN PANEL
+                renderAdminOrders();
                 updateAdminStats();
             } else { alert("Access Denied!"); }
         }
 
-        function logout() { location.reload(); }
-        function logoutAdmin() { location.reload(); }
+        // 🌟 BUG FIX: LOGOUT WILL NO LONGER REFRESH THE PAGE (Data is saved!) 🌟
+        function logout() { 
+            document.getElementById("mainHeader").style.display = "none";
+            document.getElementById("mainContentWrapper").style.display = "none";
+            document.getElementById("adminSection").style.display = "none";
+            document.getElementById("loginOverlay").style.display = "flex";
+            document.getElementById("loginStep1").style.display = "block";
+            document.getElementById("loginStep2").style.display = "none";
+            document.getElementById("mobileInput").value = "";
+            document.getElementById("otpInput").value = "";
+            gsap.to("#loginOverlay", { opacity: 1, duration: 0.5 });
+        }
+        function logoutAdmin() { logout(); }
 
         function showSection(sectionId) {
             document.querySelectorAll('.page-section').forEach(sec => sec.style.display = 'none');
@@ -622,6 +636,16 @@
             let date = document.getElementById("deliveryDate").value;
             if(!address || !date) return alert("Please fill Delivery Address and Date.");
 
+            // 🌟 BUG FIX: UPI & Card Input Validation Added 🌟
+            let payMethod = document.querySelector('input[name="payMethod"]:checked').value;
+            if(payMethod === "upi") {
+                let upiId = document.getElementById("upiIdInput").value;
+                if(!upiId) return alert("Boss, please enter your UPI ID to verify payment.");
+            } else if (payMethod === "card") {
+                let cardNo = document.getElementById("cardNoInput").value;
+                if(!cardNo || cardNo.length < 12) return alert("Boss, please enter a valid Card Number.");
+            }
+
             document.getElementById("paymentForm").style.display = "none";
             document.getElementById("payTitle").style.display = "none";
             document.getElementById("payLoader").style.display = "block";
@@ -634,28 +658,11 @@
                 let cartTotalValue = parseInt(document.getElementById("cartTotal").innerText);
                 let randomOrderId = Math.floor(Math.random() * 90000) + 10000;
                 
-                // 1. Add to Customer Orders History
                 myOrders.push({ id: randomOrderId, items: cart.length, total: cartTotalValue, status: 'Processing', date: date });
                 totalRevenue += cartTotalValue;
                 
-                // 2. Add to Admin Orders Live 
-                let adminTable = document.getElementById("adminOrderTable");
-                let newAdminOrder = `
-                    <tr id="row-${randomOrderId}">
-                        <td style="font-weight: bold;">#ORD-${randomOrderId}</td>
-                        <td>Live Customer</td>
-                        <td style="color: var(--primary); font-weight: bold;">₹${cartTotalValue}</td>
-                        <td>
-                            <select onchange="changeOrderStatus(${randomOrderId}, this.value)" style="padding:5px; border-radius:5px; border:1px solid #ccc; background:white; color:black;">
-                                <option value="Processing" selected>Processing</option>
-                                <option value="Shipped">Shipped</option>
-                                <option value="Delivered">Delivered</option>
-                            </select>
-                        </td>
-                    </tr>
-                `;
-                adminTable.innerHTML = newAdminOrder + adminTable.innerHTML;
-                
+                // Robust Admin Re-render
+                renderAdminOrders();
                 renderAdminProducts();
                 updateAdminStats();
 
@@ -679,7 +686,7 @@
             list.innerHTML = html + '</table>';
         }
 
-        // --- ADVANCED ADMIN PANEL ---
+        // --- 🌟 ADVANCED ADMIN PANEL (Fixed Refresh Bug) 🌟 ---
         function switchAdminTab(tab, element) {
             document.getElementById("adminTabDashboard").style.display = tab === 'dashboard' ? 'block' : 'none';
             document.getElementById("adminTabInventory").style.display = tab === 'inventory' ? 'block' : 'none';
@@ -692,6 +699,28 @@
             document.getElementById("adminActiveOrders").innerText = myOrders.length;
             document.getElementById("adminRev").innerText = "₹" + totalRevenue;
             document.getElementById("adminLowStock").innerText = products.filter(p => p.stock < 5).length;
+        }
+
+        // Dedicated Function to Render Admin Orders Safely
+        function renderAdminOrders() {
+            let adminTable = document.getElementById("adminOrderTable");
+            adminTable.innerHTML = "";
+            myOrders.forEach(o => {
+                adminTable.innerHTML += `
+                    <tr id="row-${o.id}">
+                        <td style="font-weight: bold;">#ORD-${o.id}</td>
+                        <td>Live Customer</td>
+                        <td style="color: var(--primary); font-weight: bold;">₹${o.total}</td>
+                        <td>
+                            <select onchange="changeOrderStatus(${o.id}, this.value)" style="padding:5px; border-radius:5px; border:1px solid #ccc; background:white; color:black;">
+                                <option value="Processing" ${o.status === 'Processing' ? 'selected' : ''}>Processing</option>
+                                <option value="Shipped" ${o.status === 'Shipped' ? 'selected' : ''}>Shipped</option>
+                                <option value="Delivered" ${o.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                            </select>
+                        </td>
+                    </tr>
+                `;
+            });
         }
 
         function changeOrderStatus(orderId, newStatus) {
