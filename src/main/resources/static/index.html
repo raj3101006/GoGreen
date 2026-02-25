@@ -3,278 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Greenish Plant | High-Level Enterprise</title>
+    <title>Greenish Plant | Java Enterprise MVC</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
-        :root { --primary: #2d6a4f; --accent: #40916c; --bg: #f0f7f4; --text: #1b4332; --glass: rgba(255, 255, 255, 0.9); }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        :root { --primary: #2d6a4f; --bg: #eaf4f0; --glass: rgba(255, 255, 255, 0.9); --text: #1b4332; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg); color: var(--text); overflow-x: hidden; }
-        
         #canvas-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
-        
-        /* Navigation */
-        header { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: var(--glass); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 15px 50px; background: var(--glass); backdrop-filter: blur(15px); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05); }
         .logo { font-size: 24px; font-weight: 800; color: var(--primary); }
-        nav { display: flex; gap: 20px; }
-        nav a { cursor: pointer; font-weight: 600; font-size: 14px; transition: 0.3s; }
-        nav a:hover { color: var(--accent); }
-
-        /* Hero Section */
-        .page-section { min-height: 90vh; padding: 40px 5%; display: none; animation: fadeIn 0.5s ease; }
-        #home { display: block; text-align: center; padding-top: 100px; }
-        #home h1 { font-size: 4rem; line-height: 1.1; margin-bottom: 20px; }
-        #home h1 span { color: var(--primary); }
-
-        /* Shop & Filters */
-        .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; justify-content: center; }
-        .filter-btn { padding: 8px 15px; border: 1px solid var(--primary); border-radius: 20px; background: white; cursor: pointer; font-size: 12px; transition: 0.3s; }
-        .filter-btn.active { background: var(--primary); color: white; }
-
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
-        .card { background: white; border-radius: 20px; padding: 15px; border: 1px solid #eee; transition: 0.4s; position: relative; }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.05); }
-        .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 15px; }
-        .card .tag { position: absolute; top: 25px; left: 25px; background: var(--primary); color: white; padding: 4px 10px; border-radius: 10px; font-size: 10px; }
-        .card h3 { font-size: 18px; margin: 10px 0 5px; }
-        .care-info { font-size: 11px; color: #666; margin-bottom: 10px; }
-        .price { font-size: 20px; font-weight: 800; color: var(--primary); margin-bottom: 10px; }
-        .btn-buy { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; }
-
-        /* Cart & Modals */
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 5000; padding: 20px; }
-        .modal { background: white; padding: 30px; border-radius: 25px; width: 100%; max-width: 450px; text-align: center; max-height: 90vh; overflow-y: auto; }
-        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 10px; }
-
-        /* Admin & Table */
-        .admin-table { width: 100%; border-collapse: collapse; background: white; border-radius: 15px; overflow: hidden; margin-top: 20px; }
-        .admin-table th, .admin-table td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
-        .admin-table th { background: var(--primary); color: white; }
-
-        /* Mobile View */
+        nav { display: flex; gap: 20px; align-items: center; }
+        nav a { text-decoration: none; color: var(--text); font-weight: 600; cursor: pointer; font-size: 14px; }
+        .page-section { min-height: 90vh; padding: 50px; display: none; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; margin-top: 30px; }
+        .product-card { background: white; border-radius: 20px; padding: 20px; text-align: center; border: 1px solid #ddd; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.02); }
+        .product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 15px; }
+        .btn-buy { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 5000; padding: 20px; }
+        .modal { background: var(--glass); padding: 30px; border-radius: 25px; width: 100%; max-width: 450px; text-align: center; max-height: 90vh; overflow-y: auto; }
         @media (max-width: 768px) {
             header { flex-direction: column; padding: 15px; }
-            #home h1 { font-size: 2.5rem; }
             .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-            .card { padding: 10px; }
-            .card img { height: 130px; }
-            .card h3 { font-size: 14px; }
+            .page-section { padding: 20px; }
+            nav { gap: 10px; margin-top: 10px; }
         }
-
-        @media print { body * { visibility: hidden; } #invoiceArea, #invoiceArea * { visibility: visible; } #invoiceArea { position: fixed; left: 0; top: 0; width: 100%; padding: 40px; } .no-print { display: none; } }
+        footer { padding: 30px; text-align: center; background: #081c15; color: white; margin-top: 50px; }
+        @media print { body * { visibility: hidden; } #invoicePrintArea, #invoicePrintArea * { visibility: visible; } #invoicePrintArea { position: fixed; left:0; top:0; width:100%; background:white; color:black; padding:40px; } }
     </style>
 </head>
 <body>
 
     <div id="canvas-container"></div>
 
-    <header id="mainHeader">
+    <div id="loginOverlay" class="overlay" style="display: flex;">
+        <div class="modal">
+            <h2 style="color:var(--primary)">Java MVC Authorization</h2>
+            <p style="margin-bottom: 20px; font-size: 12px; opacity: 0.7;">Persistent SQL Session v2.0</p>
+            <div id="step1">
+                <input type="number" id="phone" placeholder="Phone Number" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:1px solid #ccc;">
+                <button class="btn-buy" onclick="AuthService.requestToken()">Authorize()</button>
+            </div>
+            <div id="step2" style="display:none">
+                <input type="number" id="otp" placeholder="OTP" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:1px solid #ccc;">
+                <button class="btn-buy" onclick="AuthService.validateToken()">VerifySession()</button>
+            </div>
+            <p onclick="adminLogin()" style="margin-top:20px; font-size:11px; cursor:pointer; text-decoration:underline;">Root SQL Console</p>
+        </div>
+    </div>
+
+    <header id="mainHeader" style="display:none">
         <div class="logo">🌿 Greenish</div>
         <nav>
-            <a onclick="View.show('home')">Home</a>
-            <a onclick="View.show('shop')">Shop</a>
-            <a onclick="View.show('orders')">Orders</a>
-            <a onclick="Cart.open()" style="background:var(--primary); color:white; padding:5px 15px; border-radius:20px;">Cart (<span id="cartCount">0</span>)</a>
-            <a onclick="adminLogin()">Admin</a>
+            <a onclick="RouteManager.navigate('home')">Home</a>
+            <a onclick="RouteManager.navigate('shop')">Catalog</a>
+            <a onclick="RouteManager.navigate('orders')">SQL_Orders</a>
+            <a onclick="CartManager.display()" style="background:var(--primary); color:white; padding:5px 15px; border-radius:20px;">Cart (<span id="cartCount">0</span>)</a>
+            <a onclick="location.reload()">Logout</a>
         </nav>
     </header>
 
-    <div id="app">
-        <section id="home" class="page-section">
-            <span style="background:var(--primary); color:white; padding:5px 15px; border-radius:20px; font-size:12px;">Plan-Based Java Architecture</span>
-            <h1>Fresh Plants <br> <span>Delivered To Your Home</span></h1>
-            <p>Air Purifying, Indoor & Outdoor Plants with Expert Care Guide.</p>
-            <button class="btn-buy" style="width: 220px; margin-top: 30px;" onclick="View.show('shop')">Start Gardening</button>
+    <div id="mainContent" style="display:none">
+        <section id="home" class="page-section" style="display:block">
+            <h1>Java Enterprise <br> <span style="color:var(--primary)">3D Plant Store</span></h1>
+            <p>10x Modified Persistent MVC Architecture with Real Java Backend.</p>
+            <button class="btn-buy" style="width:200px; margin-top:20px;" onclick="RouteManager.navigate('shop')">Fetch Catalog</button>
         </section>
 
         <section id="shop" class="page-section">
-            <div class="filter-bar">
-                <button class="filter-btn active" onclick="Shop.filter('All', this)">All</button>
-                <button class="filter-btn" onclick="Shop.filter('Indoor', this)">Indoor</button>
-                <button class="filter-btn" onclick="Shop.filter('Outdoor', this)">Outdoor</button>
-                <button class="filter-btn" onclick="Shop.filter('Flowering', this)">Flowering</button>
-                <button class="filter-btn" onclick="Shop.filter('Seeds', this)">Seeds</button>
-            </div>
+            <h2>Active Inventory</h2>
             <div class="product-grid" id="productGrid"></div>
         </section>
 
         <section id="orders" class="page-section">
-            <h2>📜 SQL Order History</h2>
-            <div class="admin-table-container" id="orderHistory" style="margin-top: 20px;"></div>
+            <h2>📜 SQL Transaction Logs</h2>
+            <div id="sqlRecords" style="margin-top:20px;"></div>
         </section>
 
-        <footer style="background:#081c15; color:white; padding:40px; text-align:center; margin-top:50px;">
-            <p>&copy; 2026 Greenish Plants | Vivek Sharma</p>
-        </footer>
+        <footer>&copy; 2026 Greenish Plant. Developed by <strong>Vivek Sharma</strong>.</footer>
     </div>
 
     <div id="cartModal" class="overlay">
         <div class="modal">
-            <h2>Your Cart</h2>
-            <div id="cartList" style="text-align: left; margin: 20px 0;"></div>
-            <h3 id="cartTotal">Total: ₹0</h3>
-            <button class="btn-buy" style="margin-top: 20px;" onclick="Cart.checkout()">Proceed to Checkout</button>
-            <button class="btn-buy" style="background:#555; margin-top:10px;" onclick="Cart.close()">Close</button>
+            <h2>Session Cart</h2>
+            <div id="itemsList" style="text-align:left; margin:20px 0;"></div>
+            <h3 id="totalAmt">Total: ₹0</h3>
+            <button class="btn-buy" onclick="CartManager.checkout()">Commit Transaction</button>
+            <button class="btn-buy" style="background:#555; margin-top:10px;" onclick="document.getElementById('cartModal').style.display='none'">Close</button>
+        </div>
+    </div>
+
+    <div id="invoiceOverlay" class="overlay">
+        <div class="modal" id="invoicePrintArea" style="background: white; color: black; text-align: left; max-width: 600px;">
+            <h2 style="color: #2d6a4f; border-bottom: 2px solid #2d6a4f; padding-bottom: 10px;">Greenish Enterprise Bill</h2>
+            <div id="invOrderDetails" style="margin: 20px 0; font-size: 13px;"></div>
+            <table style="width:100%; border-collapse: collapse; margin-bottom: 20px;">
+                <tbody id="invItems"></tbody>
+            </table>
+            <h3 id="invTotal" style="text-align: right;"></h3>
+            <button class="btn-buy" onclick="window.print()" style="margin-top:20px;">Print Bill</button>
+            <button class="btn-buy" style="background:#555; margin-top:10px;" onclick="document.getElementById('invoiceOverlay').style.display='none'">Exit</button>
         </div>
     </div>
 
     <div id="payModal" class="overlay">
-        <div class="modal" style="text-align: left;">
-            <h2>Checkout Details</h2>
-            <label>Full Name</label><input type="text" id="custName" value="Vivek Sharma">
-            <label>Address</label><textarea id="custAddr" rows="2"></textarea>
-            <label>Payment: UPI Scan</label>
-            <div style="text-align:center;"><img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=upi://pay?pa=vivek@upi" style="width:100px; margin: 10px 0;"></div>
-            <button class="btn-buy" onclick="SQL.commit()">Commit SQL Transaction</button>
-        </div>
-    </div>
-
-    <div id="invoiceModal" class="overlay">
-        <div class="modal" id="invoiceArea" style="background:white; color:black; text-align:left;">
-            <h2 style="color:var(--primary); border-bottom:2px solid var(--primary);">Greenish Invoice</h2>
-            <div id="invBody" style="margin:20px 0; font-size:13px;"></div>
-            <button class="btn-buy no-print" onclick="window.print()">Print Bill</button>
-            <button class="btn-buy no-print" style="background:#333; margin-top:10px;" onclick="document.getElementById('invoiceModal').style.display='none'">Exit</button>
+        <div class="modal" style="text-align:left">
+            <h2>Transaction Gateway</h2>
+            <div style="text-align:center; margin: 15px 0;"><img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=upi://pay?pa=vivek@upi" style="border-radius:10px;"></div>
+            <label>UPI ID:</label><input type="text" id="upi" placeholder="username@bank" style="width:100%; padding:10px; margin-bottom:10px;">
+            <label>Address:</label><textarea id="address" style="width:100%; padding:10px; border-radius:10px;"></textarea>
+            <button class="btn-buy" onclick="SQLDatabase.insertOrder()">Execute SQL INSERT</button>
         </div>
     </div>
 
     <script>
-        /* ☕ JAVA-SQL MVC SERVICES */
-        const SQL = {
-            async commit() {
-                let name = document.getElementById('custName').value;
-                let addr = document.getElementById('custAddr').value;
-                if(!addr) return alert("Please enter delivery address!");
-
-                let order = {
-                    id: "ORD" + Math.floor(Math.random()*99999),
-                    customer: name,
-                    address: addr,
-                    total: document.getElementById('cartTotal').innerText,
-                    date: new Date().toLocaleDateString(),
-                    items: [...cartItems]
-                };
-
-                try {
-                    const response = await fetch('/api/checkout', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify(order)
-                    });
-                    confetti();
-                    alert("SQL COMMIT SUCCESS: Order Recorded!");
-                    location.reload();
-                } catch(e) {
-                    // Fallback local persistence
-                    let db = JSON.parse(localStorage.getItem('greenish_sql')) || [];
-                    db.push(order);
-                    localStorage.setItem('greenish_sql', JSON.stringify(db));
-                    confetti(); alert("OFFLINE COMMIT: Order Saved Locally.");
-                    location.reload();
-                }
-            }
-        };
-
-        const View = {
-            show(id) {
-                document.querySelectorAll('.page-section').forEach(s => s.style.display = 'none');
-                document.getElementById(id).style.display = (id==='home') ? 'block' : 'block';
-                if(id === 'orders') this.renderOrders();
-            },
-            renderOrders() {
-                let db = JSON.parse(localStorage.getItem('greenish_sql')) || [];
-                let h = '<table class="admin-table"><tr><th>OID</th><th>Customer</th><th>Total</th><th>Bill</th></tr>';
-                db.reverse().forEach(o => {
-                    h += `<tr><td>#${o.id}</td><td>${o.customer}</td><td>${o.total}</td><td><button onclick="View.print('${o.id}')" style="background:var(--primary); color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">View</button></td></tr>`;
-                });
-                document.getElementById('orderHistory').innerHTML = h + '</table>';
-            },
-            print(oid) {
-                let db = JSON.parse(localStorage.getItem('greenish_sql')) || [];
-                let o = db.find(x => x.id === oid);
-                if(!o) return;
-                document.getElementById('invBody').innerHTML = `<b>Order ID:</b> #${o.id}<br><b>Customer:</b> ${o.customer}<br><b>Address:</b> ${o.address}<br><b>Date:</b> ${o.date}<br><br><b>Items:</b><br>` + o.items.map(i => `• ${i.name} (₹${i.price})`).join('<br>') + `<br><br><b>Total: ${o.total}</b>`;
-                document.getElementById('invoiceModal').style.display = 'flex';
-            }
-        };
-
-        const Shop = {
-            filter(cat, btn) {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                this.render(cat);
-            },
-            render(cat) {
-                let g = document.getElementById('productGrid');
-                g.innerHTML = "";
-                let filtered = cat === 'All' ? products : products.filter(p => p.cat === cat);
-                filtered.forEach(p => {
-                    g.innerHTML += `
-                    <div class="card">
-                        <span class="tag">${p.tag}</span>
-                        <img src="${p.img}" onerror="this.src='https://via.placeholder.com/200?text=Plant'">
-                        <h3>${p.name}</h3>
-                        <p class="care-info">☀️ ${p.sun} | 💧 ${p.water}</p>
-                        <p class="price">₹${p.price}</p>
-                        <button class="btn-buy" onclick="Cart.add(${p.id})">Add to Cart</button>
-                    </div>`;
-                });
-            }
-        };
-
-        let cartItems = [];
-        const Cart = {
-            add(id) {
-                let p = products.find(x => x.id === id);
-                cartItems.push(p);
-                document.getElementById('cartCount').innerText = cartItems.length;
-                alert(p.name + " added to Cart!");
-            },
-            open() {
-                document.getElementById('cartModal').style.display = 'flex';
-                let h = ""; let t = 0;
-                cartItems.forEach(i => { h += `<p style="border-bottom:1px solid #eee; padding:5px 0;">• ${i.name} (₹${i.price})</p>`; t += i.price; });
-                document.getElementById('cartList').innerHTML = h || "Cart is empty.";
-                document.getElementById('cartTotal').innerText = "₹" + t;
-            },
-            close() { document.getElementById('cartModal').style.display = 'none'; },
-            checkout() { this.close(); document.getElementById('payModal').style.display = 'flex'; }
-        };
-
-        const products = [
-            { id: 1, name: "Monstera", cat: "Indoor", price: 499, tag: "Air Purifier", sun: "Low", water: "Weekly", img: "https://images.pexels.com/photos/3125195/pexels-photo-3125195.jpeg?w=400" },
-            { id: 2, name: "Snake Plant", cat: "Indoor", price: 299, tag: "Pet Friendly", sun: "Low", water: "Bi-weekly", img: "https://images.pexels.com/photos/2123482/pexels-photo-2123482.jpeg?w=400" },
-            { id: 3, name: "Red Rose", cat: "Flowering", price: 349, tag: "Best Seller", sun: "High", water: "Daily", img: "https://images.pexels.com/photos/736230/pexels-photo-736230.jpeg?w=400" },
-            { id: 4, name: "Aloe Vera", cat: "Outdoor", price: 199, tag: "Medicinal", sun: "High", water: "Weekly", img: "https://images.pexels.com/photos/1334605/pexels-photo-1334605.jpeg?w=400" },
-            { id: 5, name: "Ficus Bonsai", cat: "Indoor", price: 899, tag: "Premium", sun: "Medium", water: "Weekly", img: "https://images.pexels.com/photos/3273934/pexels-photo-3273934.jpeg?w=400" },
-            { id: 6, name: "Sunflower", cat: "Flowering", price: 250, tag: "Seasonal", sun: "High", water: "Daily", img: "https://images.pexels.com/photos/1366630/pexels-photo-1366630.jpeg?w=400" },
-            { id: 7, name: "Mixed Seeds", cat: "Seeds", price: 150, tag: "Beginner", sun: "Medium", water: "Daily", img: "https://images.pexels.com/photos/1105019/pexels-photo-1105019.jpeg?w=400" },
-            { id: 8, name: "Areca Palm", cat: "Outdoor", price: 699, tag: "Air Purifier", sun: "Medium", water: "Daily", img: "https://images.pexels.com/photos/1084199/pexels-photo-1084199.jpeg?w=400" }
-        ];
-
-        function adminLogin() {
-            let id = prompt("Admin ID:"); let p = prompt("Password:");
-            if(id === "Vivek02" && p === "Vivek1234@") View.show('orders');
+        class AuthService {
+            static requestToken() { if(document.getElementById('phone').value.length === 10) { document.getElementById('step1').style.display = 'none'; document.getElementById('step2').style.display = 'block'; } else alert("NullMobileException"); }
+            static validateToken() { gsap.to("#loginOverlay", { opacity: 0, duration: 0.5, onComplete: () => { document.getElementById("loginOverlay").style.display = "none"; document.getElementById("mainHeader").style.display = "flex"; document.getElementById("mainContent").style.display = "block"; }}); }
         }
 
-        window.onload = () => { Shop.render('All'); };
+        class SQLDatabase {
+            static async insertOrder() {
+                let upi = document.getElementById('upi').value;
+                let addr = document.getElementById('address').value;
+                if(!upi || !addr) return alert("SQLException: Integrity Constraint Violation");
+                let orderObj = { id: "TXN" + Math.floor(Math.random()*99999), user: "Vivek Sharma", addr: addr, total: document.getElementById('totalAmt').innerText, date: new Date().toLocaleDateString(), items: [...sessionList] };
+                
+                try {
+                    await fetch('/api/commitTransaction', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(orderObj) });
+                    let db = JSON.parse(localStorage.getItem('java_sql')) || []; db.push(orderObj); localStorage.setItem('java_sql', JSON.stringify(db));
+                    confetti(); alert("COMMIT: SQL TRANSACTION SUCCESSFUL."); location.reload();
+                } catch(e) { console.error(e); }
+            }
+        }
 
-        // 3D Background
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        class RouteManager {
+            static navigate(pageId) { document.querySelectorAll('.page-section').forEach(s => s.style.display = 'none'); document.getElementById(pageId).style.display = 'block'; if(pageId === 'orders') this.fetchOrders(); }
+            static async fetchOrders() {
+                let db = JSON.parse(localStorage.getItem('java_sql')) || [];
+                let html = '<table width="100%" style="border-collapse:collapse;"><tr><th>TXN_ID</th><th>Total</th><th>Bill</th></tr>';
+                db.reverse().forEach(o => { html += `<tr style="border-bottom:1px solid #ddd; padding:10px;"><td>#${o.id}</td><td>${o.total}</td><td><button onclick="RouteManager.openInvoice('${o.id}')" style="background:var(--primary); color:white; border:none; padding:5px; border-radius:5px; cursor:pointer;">View</button></td></tr>`; });
+                document.getElementById('sqlRecords').innerHTML = html + '</table>';
+            }
+            static openInvoice(id) {
+                let db = JSON.parse(localStorage.getItem('java_sql')) || []; let o = db.find(x => x.id === id); if(!o) return;
+                document.getElementById('invOrderDetails').innerHTML = `<b>OID:</b> #${o.id}<br><b>Client:</b> ${o.user}<br><b>Address:</b> ${o.addr}<br><b>Date:</b> ${o.date}`;
+                let h = ""; o.items.forEach(i => { h += `<tr><td style="padding:10px; border-bottom:1px solid #eee;">${i.name}</td><td style="text-align:right;">₹${i.price}</td></tr>`; });
+                document.getElementById('invItems').innerHTML = h; document.getElementById('invTotal').innerText = "Total: " + o.total;
+                document.getElementById('invoiceOverlay').style.display = 'flex';
+            }
+        }
+
+        let sessionList = [];
+        class CartManager {
+            static add(id) { let p = products.find(x => x.id === id); sessionList.push(p); document.getElementById('cartCount').innerText = sessionList.length; alert("Object Serialized."); }
+            static display() { document.getElementById('cartModal').style.display = 'flex'; let h = ""; let t = 0; sessionList.forEach(i => { h += `<p>• ${i.name} (₹${i.price})</p>`; t += i.price; }); document.getElementById('itemsList').innerHTML = h || "Empty."; document.getElementById('totalAmt').innerText = "₹" + t; }
+            static checkout() { if(sessionList.length === 0) return; document.getElementById('cartModal').style.display = 'none'; document.getElementById('payModal').style.display = 'flex'; }
+        }
+
+        const products = [
+            { id: 1, name: "Monstera Deliciosa", price: 499, img: "https://images.pexels.com/photos/3125195/pexels-photo-3125195.jpeg?w=400" },
+            { id: 2, name: "Snake Plant", price: 299, img: "https://images.pexels.com/photos/2123482/pexels-photo-2123482.jpeg?w=400" },
+            { id: 3, name: "Ficus Bonsai", price: 899, img: "https://images.pexels.com/photos/3273934/pexels-photo-3273934.jpeg?w=400" },
+            { id: 4, name: "Aloe Vera", price: 199, img: "https://images.pexels.com/photos/1334605/pexels-photo-1334605.jpeg?w=400" },
+            { id: 5, name: "Areca Palm", price: 699, img: "https://images.pexels.com/photos/1084199/pexels-photo-1084199.jpeg?w=400" },
+            { id: 6, name: "Red Rose Plant", price: 349, img: "https://images.pexels.com/photos/736230/pexels-photo-736230.jpeg?w=400" },
+            { id: 7, name: "Sunflower Pot", price: 250, img: "https://images.pexels.com/photos/1366630/pexels-photo-1366630.jpeg?w=400" },
+            { id: 8, name: "Mixed Seeds", price: 150, img: "https://images.pexels.com/photos/1105019/pexels-photo-1105019.jpeg?w=400" },
+            { id: 9, name: "Organic Basil", price: 99, img: "https://images.pexels.com/photos/1080400/pexels-photo-1080400.jpeg?w=400" },
+            { id: 10, name: "Ceramic Pot", price: 399, img: "https://images.pexels.com/photos/6601444/pexels-photo-6601444.jpeg?w=400" },
+            { id: 11, name: "Terracotta Pot", price: 299, img: "https://images.pexels.com/photos/4505166/pexels-photo-4505166.jpeg?w=400" },
+            { id: 12, name: "Tool Kit", price: 549, img: "https://images.pexels.com/photos/4202924/pexels-photo-4202924.jpeg?w=400" }
+        ];
+
+        window.onload = () => { const g = document.getElementById('productGrid'); products.forEach(p => { g.innerHTML += `<div class="product-card"><img src="${p.img}"><h3>${p.name}</h3><p>₹${p.price}</p><button class="btn-buy" onclick="CartManager.add(${p.id})">Add Object</button></div>`; }); }
+        function adminLogin() { let id = prompt("SQL_USER:"); let p = prompt("SQL_PASS:"); if(id === "Vivek02" && p === "Vivek1234@") RouteManager.navigate('orders'); }
+
+        const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById('canvas-container').appendChild(renderer.domElement);
-        const shape = new THREE.Mesh(new THREE.IcosahedronGeometry(2, 0), new THREE.MeshStandardMaterial({ color: 0x40916c, wireframe: true }));
-        scene.add(shape);
-        const light = new THREE.PointLight(0xffffff, 1); light.position.set(10, 10, 10); scene.add(light);
-        camera.position.z = 6;
-        function animate() { requestAnimationFrame(animate); shape.rotation.x += 0.005; shape.rotation.y += 0.005; renderer.render(scene, camera); }
-        animate();
+        const shape = new THREE.Mesh(new THREE.TorusKnotGeometry(1.5, 0.4, 100, 16), new THREE.MeshStandardMaterial({ color: 0x40916c, wireframe: true }));
+        scene.add(shape); const light = new THREE.PointLight(0xffffff, 1); light.position.set(10, 10, 10); scene.add(light);
+        camera.position.z = 6; function animate() { requestAnimationFrame(animate); shape.rotation.x += 0.005; shape.rotation.y += 0.005; renderer.render(scene, camera); } animate();
     </script>
 </body>
 </html>
