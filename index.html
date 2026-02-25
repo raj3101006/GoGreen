@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoGreen - Premium Plant Store</title>
+    <title>Navya Astra Plants - Premium 3D Store</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -17,64 +17,125 @@
     <div id="loginOverlay" class="overlay">
         <div class="glass-box">
             <h2>🌿 Navya Astra Plants</h2>
-            <p>Login to your account</p>
+            <p style="margin-bottom: 20px;">Welcome to Premium 3D Store</p>
             <div id="loginStep1">
                 <input type="number" id="mobileInput" placeholder="Enter 10-digit mobile number">
-                <button class="btn-primary" onclick="sendOTP()">Get OTP</button>
+                <button class="btn-primary" onclick="sendOTP()" style="width: 100%;">Get OTP</button>
             </div>
             <div id="loginStep2" style="display: none;">
-                <p class="small-text">OTP sent successfully!</p>
+                <p class="small-text" style="color: green; margin-bottom: 10px;">OTP sent successfully!</p>
                 <input type="number" id="otpInput" placeholder="Enter 4-digit OTP">
-                <button class="btn-primary" onclick="verifyOTP()">Login</button>
+                <button class="btn-primary" onclick="verifyOTP()" style="width: 100%;">Verify & Login</button>
             </div>
-            <p class="admin-link" onclick="adminLogin()">Owner / Admin Login</p>
+            <p class="admin-link" onclick="adminLogin()">Owner / Admin Access</p>
         </div>
     </div>
 
     <header id="mainHeader" style="display: none;">
-        <div class="logo">🌿 GoGreen</div>
+        <div class="logo">🌿 Navya Astra</div>
         <nav>
+            <a href="#" onclick="toggleTheme()" title="Dark/Light Mode"><i class="fa-solid fa-moon"></i></a>
             <a href="#" onclick="showSection('homeSection')">Home</a>
-            <a href="#" onclick="showSection('shopSection')">Shop Plants</a>
+            <a href="#" onclick="showSection('shopSection')">Shop</a>
+            <a href="#" onclick="showSection('wishlistSection')">❤️ Wishlist (<span id="wishCount">0</span>)</a>
+            <a href="#" onclick="showMyOrders()">📦 My Orders</a>
             <a href="#" class="cart-btn" onclick="openCart()">
                 <i class="fa-solid fa-cart-shopping"></i> Cart (<span id="cartCount">0</span>)
             </a>
-            <a href="#" onclick="logout()"><i class="fa-solid fa-user"></i> Logout</a>
+            <a href="#" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
         </nav>
     </header>
 
-    <section id="homeSection" class="page-section" style="display: none;">
-        <div class="hero-content">
-            <span class="badge">100% Organic 🌱</span>
-            <h1>Bring Nature <br> <span class="highlight">To Your Home</span></h1>
-            <p>Explore our premium collection of Indoor, Outdoor, and Air-Purifying plants with detailed care guides.</p>
-            <button class="btn-primary hero-btn" onclick="showSection('shopSection')">Shop Now</button>
-        </div>
-    </section>
-
-    <section id="shopSection" class="page-section" style="display: none;">
-        <div class="shop-container">
-            <div class="filters">
-                <h3>Filters</h3>
-                <button class="filter-btn active" onclick="filterPlants('All')">All Plants</button>
-                <button class="filter-btn" onclick="filterPlants('Indoor')">Indoor 🪴</button>
-                <button class="filter-btn" onclick="filterPlants('Outdoor')">Outdoor 🌳</button>
-                <button class="filter-btn" onclick="filterPlants('Pet-Friendly')">Pet-Friendly 🐶</button>
+    <div id="mainContentWrapper" style="display: none;">
+        
+        <section id="homeSection" class="page-section">
+            <div class="hero-content">
+                <span class="badge">100% Organic 🌱</span>
+                <h1>Bring Nature <br> <span class="highlight">To Your Home</span></h1>
+                <p>Experience India's first fully interactive 3D plant e-commerce website.</p>
+                <button class="btn-primary hero-btn" onclick="showSection('shopSection')">Explore Catalog</button>
             </div>
-            <div class="product-grid" id="productGrid">
+        </section>
+
+        <section id="shopSection" class="page-section" style="display: none;">
+            <div class="shop-container">
+                <div class="filters" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                    <div>
+                        <button class="filter-btn active" onclick="filterPlants('All')">All Items</button>
+                        <button class="filter-btn" onclick="filterPlants('Indoor')">Indoor 🪴</button>
+                        <button class="filter-btn" onclick="filterPlants('Outdoor')">Outdoor 🌳</button>
+                        <button class="filter-btn" onclick="filterPlants('Flowers')">Flowers 🌸</button>
+                        <button class="filter-btn" onclick="filterPlants('Seeds')">Seeds 🌱</button>
+                        <button class="filter-btn" onclick="filterPlants('Accessories')">Pots & Tools 🪣</button>
+                    </div>
+                    <div class="search-box">
+                        <input type="text" placeholder="Search plants..." id="searchInput" onkeyup="searchProducts()">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
                 </div>
+                <div class="product-grid" id="productGrid"></div>
+            </div>
+        </section>
+
+        <section id="wishlistSection" class="page-section" style="display: none;">
+            <div class="shop-container" style="width: 100%;">
+                <h2>❤️ My Wishlist</h2>
+                <div class="product-grid" id="wishlistGrid"></div>
+            </div>
+        </section>
+
+        <section id="ordersSection" class="page-section" style="display: none;">
+            <div class="shop-container" style="max-width: 900px; margin: 0 auto; width: 100%;">
+                <h2>📦 My Order History</h2>
+                <p style="color: var(--text-color); opacity: 0.8; margin-bottom: 20px;">Track your recent purchases here.</p>
+                <div id="myOrdersList"></div>
+            </div>
+        </section>
+
+        <footer id="mainFooter">
+            <div class="footer-content">
+                <div><h3>🌿 Navya Astra</h3><p>India's finest 3D plant store.</p></div>
+                <div><h4>Quick Links</h4><p>About Us</p><p>Contact Us</p></div>
+                <div><h4>Policies</h4><p>Return & Refund</p><p>Privacy Policy</p></div>
+            </div>
+            <div class="footer-bottom">&copy; 2026 Navya Astra. All rights reserved.</div>
+        </footer>
+    </div>
+
+    <div id="productOverlay" class="overlay" style="display: none; opacity: 0;">
+        <div class="glass-box" style="max-width: 500px; text-align: left; position: relative;">
+            <i class="fa-solid fa-xmark close-icon" style="position: absolute; top: 15px; right: 20px;" onclick="closeProductModal()"></i>
+            <img id="detailImg" src="" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 15px;">
+            <h2 id="detailTitle">Plant Name</h2>
+            <p id="detailPrice" style="font-size: 22px; font-weight: bold; color: var(--primary); margin-bottom: 5px;">₹0</p>
+            <p id="detailStock" style="font-size: 12px; color: #d90429; font-weight: bold; margin-bottom: 15px;"></p>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 15px; font-size: 13px; background: var(--bg-color); padding: 10px; border-radius: 8px;">
+                <span id="detailSun">☀️ Sunlight</span>
+                <span id="detailWater">💧 Water</span>
+            </div>
+            <p id="detailCare" style="font-size: 13px; margin-bottom: 20px;">Care details will appear here.</p>
+            <button id="detailAddToCartBtn" class="btn-primary" style="width: 100%;">Add to Cart</button>
         </div>
-    </section>
+    </div>
 
     <div id="cartOverlay" class="overlay" style="display: none; opacity: 0;">
-        <div class="glass-box cart-box">
-            <div class="cart-header">
+        <div class="glass-box" style="max-width: 450px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
                 <h2>Your Cart 🛒</h2>
                 <i class="fa-solid fa-xmark close-icon" onclick="closeCart()"></i>
             </div>
-            <div id="cartItemsList"></div>
-            <div class="cart-summary">
-                <p>Delivery: ₹50</p>
+            <div id="cartItemsList" style="max-height: 250px; overflow-y: auto; text-align: left;"></div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <input type="text" id="promoCode" placeholder="Promo Code (Try VIVA50)" style="margin: 0; flex: 1;">
+                <button class="btn-primary" onclick="applyPromo()">Apply</button>
+            </div>
+            <p id="promoMsg" style="font-size: 12px; color: #2d6a4f; display: none; margin-top: 5px; text-align: left; font-weight: bold;">Coupon Applied Successfully!</p>
+
+            <div style="text-align: right; margin-top: 15px; border-top: 2px dashed var(--border); padding-top: 10px;">
+                <p>Delivery: <span id="deliveryCharge">₹50</span></p>
+                <p id="discountText" style="color: #2d6a4f; display: none; font-weight: bold;">Discount: -₹50</p>
                 <h3>Total: ₹<span id="cartTotal">0</span></h3>
             </div>
             <button class="btn-primary" style="width: 100%; margin-top: 15px;" onclick="startCheckout()">Proceed to Checkout</button>
@@ -82,55 +143,84 @@
     </div>
 
     <div id="paymentOverlay" class="overlay" style="display: none; opacity: 0;">
-        <div class="glass-box payment-box">
-            <h2 id="payTitle">Secure Payment 💳</h2>
-            <p id="paySubtitle">Processing via Razorpay/UPI</p>
-            
+        <div class="glass-box" style="max-width: 450px; text-align: left;">
+            <h2 id="payTitle">Secure Checkout 💳</h2>
             <div id="paymentForm">
-                <div class="pay-options">
-                    <label><input type="radio" name="pay" checked> UPI (GPay/PhonePe)</label>
-                    <label><input type="radio" name="pay"> Credit/Debit Card</label>
+                <label style="font-size: 14px; font-weight: bold;">Delivery Address</label>
+                <textarea id="deliveryAddress" placeholder="Full address with pin code" style="width:100%; padding:10px; border-radius:8px; margin-bottom: 10px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-color);" rows="2" required></textarea>
+                
+                <label style="font-size: 14px; font-weight: bold;">Expected Delivery Date</label>
+                <input type="date" id="deliveryDate" style="width:100%; padding:10px; border-radius:8px; margin-bottom: 15px;" required>
+                
+                <label style="font-size: 14px; font-weight: bold;">Payment Method</label>
+                <div style="margin-bottom: 15px; font-size: 14px;">
+                    <label><input type="radio" name="pay" checked> UPI</label>
+                    <label style="margin-left: 15px;"><input type="radio" name="pay"> Card</label>
+                    <label style="margin-left: 15px;"><input type="radio" name="pay"> COD</label>
                 </div>
-                <input type="text" placeholder="Enter UPI ID / Card Details" style="width:100%; margin-bottom:15px; padding:10px; border-radius:8px; border:1px solid #ccc;">
-                <button class="btn-primary" style="width: 100%;" onclick="processAutoPayment()">Pay Now</button>
+                
+                <button class="btn-primary" style="width: 100%;" onclick="processAutoPayment()">Pay & Place Order</button>
+                <button class="btn-primary" style="width: 100%; background: transparent; color: var(--text-color); border: 1px solid var(--border); margin-top: 10px;" onclick="closePayment()">Cancel</button>
             </div>
 
-            <div id="payLoader" class="loader-container" style="display: none;">
-                <div class="spinner"></div>
-                <p style="margin-top: 15px; font-weight: bold;">Processing Payment... Please don't refresh.</p>
+            <div id="payLoader" style="display: none; text-align: center; padding: 20px;">
+                <div class="spinner" style="border: 5px solid var(--border); border-top: 5px solid var(--primary); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+                <p style="margin-top: 15px; font-weight: bold;">Processing Payment...</p>
             </div>
             
-            <div id="paySuccess" style="display: none; color: #2d6a4f;">
-                <i class="fa-solid fa-circle-check" style="font-size: 50px; margin-bottom: 10px;"></i>
+            <div id="paySuccess" style="display: none; color: var(--primary); text-align: center;">
+                <i class="fa-solid fa-circle-check" style="font-size: 60px; margin-bottom: 10px;"></i>
                 <h2>Payment Successful!</h2>
-                <p>Order Placed Successfully. Delivery expected in 3 days.</p>
-                <button class="btn-primary" style="margin-top:20px;" onclick="closePayment()">Back to Home</button>
+                <button class="btn-primary" style="margin-top:20px; width: 100%;" onclick="closePaymentSuccess()">View Orders</button>
             </div>
         </div>
     </div>
 
-    <section id="adminSection" style="display: none;">
+    <section id="adminSection" style="display: none; height: 100vh; width: 100vw; background: var(--bg-color); position: fixed; top: 0; left: 0; z-index: 3000;">
         <div class="admin-sidebar">
-            <h2>⚙️ Admin Panel</h2>
-            <a href="#" class="active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
-            <a href="#"><i class="fa-solid fa-leaf"></i> Manage Plants</a>
-            <a href="#"><i class="fa-solid fa-box"></i> Orders</a>
+            <h2>⚙️ Navya Astra</h2>
+            <p style="color: #b7e4c7; font-size: 12px; margin-bottom: 20px;">Admin Portal</p>
+            <a href="#" class="active" onclick="switchAdminTab('dashboard', this)"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+            <a href="#" onclick="switchAdminTab('inventory', this)"><i class="fa-solid fa-leaf"></i> Stock Management</a>
+            <a href="#" onclick="downloadCSV()"><i class="fa-solid fa-file-excel"></i> Export Sales (CSV)</a>
             <a href="#" onclick="logoutAdmin()" style="color: #ff6b6b; margin-top: auto;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
         </div>
-        <div class="admin-content">
-            <h1>Welcome Boss!</h1>
-            <p>Store Overview</p>
-            <div class="stats-grid">
-                <div class="stat-card"><h3>Total Sales</h3><h2>₹24,500</h2></div>
-                <div class="stat-card"><h3>Active Orders</h3><h2>8</h2></div>
-                <div class="stat-card"><h3>Out of Stock</h3><h2>2</h2></div>
+        
+        <div class="admin-content" style="flex: 1; padding: 40px; overflow-y: auto;">
+            
+            <div id="adminTabDashboard">
+                <h1>Welcome Boss!</h1>
+                <div class="stats-grid">
+                    <div class="stat-card"><h3>Total Revenue</h3><h2 id="adminRev">₹0</h2></div>
+                    <div class="stat-card"><h3>Total Orders</h3><h2 id="adminActiveOrders">0</h2></div>
+                    <div class="stat-card"><h3>Low Stock Items</h3><h2 id="adminLowStock">0</h2></div>
+                </div>
+                
+                <h3 style="margin-top: 40px; color: var(--text-color);">Live Order Management</h3>
+                <table class="admin-table">
+                    <thead><tr><th>Order ID</th><th>Customer</th><th>Amount</th><th>Status (Change Live)</th></tr></thead>
+                    <tbody id="adminOrderTable">
+                        </tbody>
+                </table>
             </div>
-            <h3 style="margin-top: 30px;">Recent Orders</h3>
-            <table class="admin-table">
-                <tr><th>Order ID</th><th>Customer</th><th>Amount</th><th>Status</th></tr>
-                <tr><td>#ORD-789</td><td>Rahul T.</td><td>₹850</td><td><span class="status-green">Processing</span></td></tr>
-                <tr><td>#ORD-788</td><td>Sneha M.</td><td>₹450</td><td><span class="status-green">Delivered</span></td></tr>
-            </table>
+
+            <div id="adminTabInventory" style="display: none;">
+                <h1>Manage Inventory & Stock</h1>
+                <div style="background: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid var(--border);">
+                    <h3>Add New Product</h3>
+                    <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+                        <input type="text" id="newPName" placeholder="Product Name" style="padding: 10px; border-radius: 5px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-color); flex: 1;">
+                        <input type="number" id="newPPrice" placeholder="Price" style="padding: 10px; border-radius: 5px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-color); width: 100px;">
+                        <input type="number" id="newPStock" placeholder="Stock" style="padding: 10px; border-radius: 5px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-color); width: 100px;">
+                        <button class="btn-primary" onclick="addNewProduct()">Add Product</button>
+                    </div>
+                </div>
+                <table class="admin-table">
+                    <thead><tr><th>Image</th><th>Name</th><th>Price</th><th>Stock</th><th>Action</th></tr></thead>
+                    <tbody id="adminProductsTable"></tbody>
+                </table>
+            </div>
+
         </div>
     </section>
 
