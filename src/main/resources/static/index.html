@@ -3,26 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Greenish Marketplace - A to Z</title>
+    <title>Greenish Marketplace - Premium Edition</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: #eaf4f0; color: #1b4332; overflow-x: hidden; }
         
         #canvas-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
         
-        /* Glassmorphism UI */
-        .glass-box { background: rgba(255, 255, 255, 0.95); padding: 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); width: 100%; max-width: 450px; text-align: center; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 2000; padding: 15px; }
+        /* 🔥 PREMIUM LOGIN UI STYLES 🔥 */
+        .overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 2000; padding: 15px; }
         
-        input, select, textarea { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ccc; border-radius: 10px; outline: none; font-size: 14px; }
-        .btn-primary { padding: 12px; background: #2d6a4f; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; font-size: 15px; margin-top: 10px; }
-        .btn-primary:hover { background: #1b4332; transform: translateY(-2px); }
+        .glass-box { 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 40px; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15); 
+            width: 100%; 
+            max-width: 420px; 
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        .gradient-text {
+            background: linear-gradient(45deg, #1b4332, #55efc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+
+        /* Modern Input Groups with Icons */
+        .input-group { position: relative; margin-bottom: 18px; text-align: left; }
+        .input-group i { 
+            position: absolute; 
+            left: 16px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            color: #2d6a4f; 
+            font-size: 16px; 
+            pointer-events: none; 
+            opacity: 0.8;
+        }
+        .input-group input, .input-group select { 
+            width: 100%; 
+            padding: 16px 16px 16px 45px; /* Extra left padding for icon */
+            border: 1.5px solid #e1e8e5; 
+            border-radius: 12px; 
+            outline: none; 
+            font-size: 14px; 
+            background: #f9fbf9; 
+            transition: all 0.3s ease; 
+            color: #333;
+            font-weight: 500;
+        }
+        .input-group input:focus, .input-group select:focus { 
+            border-color: #2d6a4f; 
+            background: #fff; 
+            box-shadow: 0 0 0 4px rgba(45, 106, 79, 0.1); 
+        }
+
+        /* Premium Button */
+        .btn-primary { 
+            padding: 16px; 
+            background: linear-gradient(135deg, #2d6a4f, #1b4332); 
+            color: white; 
+            border: none; 
+            border-radius: 12px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            width: 100%; 
+            transition: 0.3s; 
+            font-size: 16px; 
+            margin-top: 10px; 
+            box-shadow: 0 8px 20px rgba(45, 106, 79, 0.3);
+        }
+        .btn-primary:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 12px 25px rgba(45, 106, 79, 0.4); 
+        }
+
+        textarea { width: 100%; padding: 15px; border: 1.5px solid #e1e8e5; border-radius: 12px; outline: none; font-size: 14px; }
         
         /* Dashboard Layout */
         .dashboard-layout { display: flex; min-height: 100vh; background: rgba(255,255,255,0.85); backdrop-filter: blur(10px); }
@@ -71,27 +138,54 @@
     <div id="canvas-container"></div>
 
     <div id="loginSystem" class="overlay">
+        
         <div class="glass-box" id="loginStep1">
-            <h2 style="color:#2d6a4f; font-size: 28px; margin-bottom: 5px;">🌿 Greenish</h2>
-            <p style="color: #666; font-size: 12px; margin-bottom: 20px;">Enterprise Marketplace Login</p>
+            <div style="margin-bottom: 30px;">
+                <h2 class="gradient-text">🌿 Greenish</h2>
+                <p style="color: #666; font-size: 13px; font-weight: 500;">Secure Enterprise Marketplace</p>
+            </div>
             
-            <select id="userRole">
-                <option value="customer">Login as Customer</option>
-                <option value="seller">Login as Seller</option>
-                <option value="admin">Login as Admin</option>
-            </select>
-            <input type="number" id="loginPhone" placeholder="10-Digit Mobile No.">
-            <input type="text" id="loginName" placeholder="Your Full Name">
-            <input type="number" id="loginPin" placeholder="Location Pincode (e.g., 401303)">
-            <button class="btn-primary" onclick="sendOTP()">Get Secure OTP</button>
+            <div class="input-group">
+                <i class="fa-solid fa-user-shield"></i>
+                <select id="userRole">
+                    <option value="customer">Login as Customer</option>
+                    <option value="seller">Login as Seller</option>
+                    <option value="admin">Login as Admin</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-phone"></i>
+                <input type="number" id="loginPhone" placeholder="10-Digit Mobile Number">
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" id="loginName" placeholder="Your Full Name">
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-location-dot"></i>
+                <input type="number" id="loginPin" placeholder="Delivery Pincode (e.g., 401303)">
+            </div>
+
+            <button class="btn-primary" onclick="sendOTP()">
+                Get Secure OTP <i class="fa-solid fa-arrow-right" style="margin-left: 5px;"></i>
+            </button>
         </div>
 
         <div class="glass-box hidden" id="loginStep2">
-            <h2>Authentication Required</h2>
-            <p style="font-size: 12px; color: gray;">An OTP has been sent to <span id="displayPhone" style="font-weight:bold;"></span></p>
-            <input type="number" id="enteredOTP" placeholder="• • • •" style="text-align: center; font-size: 24px; letter-spacing: 10px; font-weight:bold;">
+            <i class="fa-solid fa-shield-halved" style="font-size: 40px; color: #2d6a4f; margin-bottom: 15px;"></i>
+            <h2 style="color: #1b4332;">Verify Details</h2>
+            <p style="font-size: 13px; color: gray; margin-bottom: 25px;">An OTP has been sent to <br><b id="displayPhone" style="color:#2d6a4f; font-size:16px;"></b></p>
+            
+            <div class="input-group">
+                <i class="fa-solid fa-key"></i>
+                <input type="number" id="enteredOTP" placeholder="• • • •" style="text-align: center; font-size: 24px; letter-spacing: 10px; font-weight:bold; padding-left:15px;">
+            </div>
+            
             <button class="btn-primary" onclick="verifyOTP()">Verify & Secure Login</button>
-            <p style="font-size: 12px; color: #1a73e8; margin-top: 15px; cursor: pointer;" onclick="location.reload()">Back</p>
+            <p style="font-size: 13px; color: #1a73e8; margin-top: 20px; cursor: pointer; font-weight:500;" onclick="location.reload()"><i class="fa-solid fa-arrow-left"></i> Go Back</p>
         </div>
     </div>
 
@@ -294,15 +388,15 @@
                 { id: 1, name: "Monstera Deliciosa", price: 499, img: "https://images.pexels.com/photos/3125195/pexels-photo-3125195.jpeg?w=400" },
                 { id: 2, name: "Snake Plant", price: 299, img: "https://images.pexels.com/photos/2123482/pexels-photo-2123482.jpeg?w=400" },
                 { id: 3, name: "Ficus Bonsai", price: 899, img: "https://images.pexels.com/photos/3273934/pexels-photo-3273934.jpeg?w=400" },
-                { id: 4, name: "Aloe Vera", price: 199, img: "aloevera.png" }, // Custom Local Image
+                { id: 4, name: "Aloe Vera", price: 199, img: "aloevera.png" }, 
                 { id: 5, name: "Red Rose Plant", price: 349, img: "https://images.pexels.com/photos/736230/pexels-photo-736230.jpeg?w=400" },
                 { id: 6, name: "Peace Lily", price: 450, img: "https://images.pexels.com/photos/1105019/pexels-photo-1105019.jpeg?w=400" },
                 { id: 7, name: "Areca Palm", price: 699, img: "https://images.pexels.com/photos/1084199/pexels-photo-1084199.jpeg?w=400" },
                 { id: 8, name: "Spider Plant", price: 150, img: "https://images.pexels.com/photos/3125195/pexels-photo-3125195.jpeg?w=400" },
                 { id: 9, name: "Rubber Plant", price: 550, img: "https://images.pexels.com/photos/2123482/pexels-photo-2123482.jpeg?w=400" },
                 { id: 10, name: "Bamboo Plant", price: 299, img: "https://images.pexels.com/photos/3273934/pexels-photo-3273934.jpeg?w=400" },
-                { id: 11, name: "Jade Plant", price: 250, img: "jadeplant.png" }, // Custom Local Image
-                { id: 12, name: "Ceramic Pot", price: 399, img: "ceramicpot.png" }  // Custom Local Image
+                { id: 11, name: "Jade Plant", price: 250, img: "jadeplant.png" }, 
+                { id: 12, name: "Ceramic Pot", price: 399, img: "ceramicpot.png" }  
             ]
         };
 
@@ -340,7 +434,7 @@
             if(phone.length !== 10 || !name || !pin) return alert("Please fill all details correctly!");
             
             generatedOTP = Math.floor(1000 + Math.random() * 9000); // 4 digit OTP
-            document.getElementById('displayPhone').innerText = phone;
+            document.getElementById('displayPhone').innerText = "+91 " + phone;
             document.getElementById('loginStep1').classList.add('hidden');
             document.getElementById('loginStep2').classList.remove('hidden');
             
@@ -365,7 +459,7 @@
                 localStorage.setItem('gm_activeUser', JSON.stringify(currentUser));
                 document.getElementById('loginSystem').classList.add('hidden');
                 loadDashboard();
-            } else { alert("❌ Invalid OTP!"); }
+            } else { alert("❌ Invalid OTP! Please check the alert box."); }
         }
 
         function logout() { localStorage.removeItem('gm_activeUser'); location.reload(); }
@@ -483,6 +577,9 @@
             };
             db.orders.push(newOrder); saveDB();
             
+            // Try saving to backend, if not working, ignore it (since local storage handles it)
+            try { fetch('/api/commitTransaction', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(newOrder) }); } catch(e){}
+            
             cart = []; document.getElementById('cartCount').innerText = "0"; renderCart();
             document.getElementById("razorpayOverlay").classList.add("hidden");
             document.getElementById("payOtpBtn").innerText = "Verify & Pay";
@@ -544,8 +641,8 @@
                     aBody.innerHTML += `<tr><td><b>#${o.id}</b></td><td>${o.customerName}<br><small>${o.customerPhone}</small></td><td>${o.address}</td><td>₹${o.total}</td><td><span class="badge ${badge}">${o.status}</span></td><td><button style="color:red; border:none; background:none; cursor:pointer; font-weight:bold;" onclick="deleteOrder('${o.id}')"><i class="fa-solid fa-trash"></i> Drop</button></td></tr>`;
                 });
 
-                document.getElementById('adminSellersList').innerHTML = db.users.filter(u => u.role === 'seller').map(u => `<li><i class="fa-solid fa-user-tag"></i> ${u.name} (Ph: ${u.phone})</li>`).join('');
-                document.getElementById('adminCustList').innerHTML = db.users.filter(u => u.role === 'customer').map(u => `<li><i class="fa-solid fa-user"></i> ${u.name} (Ph: ${u.phone}) - Pin: ${u.pin}</li>`).join('');
+                document.getElementById('adminSellersList').innerHTML = db.users.filter(u => u.role === 'seller').map(u => `<li><i class="fa-solid fa-user-tag" style="margin-right:10px; color:#2d6a4f;"></i> ${u.name} (Ph: ${u.phone})</li>`).join('');
+                document.getElementById('adminCustList').innerHTML = db.users.filter(u => u.role === 'customer').map(u => `<li><i class="fa-solid fa-user" style="margin-right:10px; color:#2d6a4f;"></i> ${u.name} (Ph: ${u.phone}) - Pin: ${u.pin}</li>`).join('');
             }
         }
 
